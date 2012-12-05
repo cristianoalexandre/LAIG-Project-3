@@ -1,0 +1,76 @@
+/**
+  *	@brief Asks the server if the game may start.
+  * @param gui-ip-address The ip of the game sending the message.
+  * @param gui-port The port of the game sending the message.
+  * @return "YES." if everything is good to go.
+  * 		"NO." if something is still initializing or occupied (will only happen in multiplayer environments)."
+  */
+-> READY[<gui-ip-address>|<gui-port>]?
+		<- YES.
+		<- NO.
+
+
+
+/**
+  * @brief Asks the server for possible plays for a certain board cell.
+  * @param board Board of the current game. The Board comes in a string format, from cell (0,0) (top one), (0,1), (0,2), ... (1,0), ... (7,7).
+  *		         Each of the cell is represented by a char, depending on its content:
+  *				 # Empty  => E
+  *				 # Pawn   => P
+  *				 # Rook   => R
+  *              # Bishop => B
+  *				 # Knight => H
+  *			     # Queen  => Q
+  *				 # King	  => K
+  * @param lin The line of the current selected cell (0..7).
+  * @param col The column of the current selected cell (0..7).
+  * @param player The player who pretends to make a play.
+  *				  The player may be:
+  *				  # Human => H
+  *				  # CPU => represented by its difficulty degree (0,1,2,3,...).
+  * @param gui-ip-address The ip of the game sending the message.
+  * @param gui-port The port of the game sending the message.
+  * 
+  *	@return String with possible plays (lin|col) if available, or "NO." otherwise.
+  */
+-> SELECT|<board>|<lin>|<col>|<player>[<gui-ip-address>|<gui-port>]?
+		<- POSSIBLE|<lin1>|<col1>|<lin2>|<col2>.
+		<- NO.
+
+
+
+/**
+  * @brief Asks the server to validate a certain play.
+  * @param board Board of the current game. The Board comes in a string format, from cell (0,0) (top one), (0,1), (0,2), ... (1,0), ... (7,7).
+  * 			 Each of the cell is represented by a char, depending on its content:
+  *				 # Empty  => E
+  *				 # Pawn   => P
+  *				 # Rook   => R
+  *              # Bishop => B
+  *				 # Knight => H
+  *			     # Queen  => Q
+  *				 # King	  => K
+  * @param lin-ori The line of the cell that has the piece to be moved. (0..7)
+  * @param col-ori The column of the cell that has the piece to be moved. (0..7)
+  * @param lin-dest The line of the destination cell. (0..7)
+  * @param col-dest The column of the destination cell (0..7).
+  * @param black-player The type of black player of the game.
+  *						The player may be:
+  *				  		# Human => H
+  *	  				    # CPU => represented by its difficulty degree (0,1,2,3,...).
+  * @param white-player The type of white player of the game.
+  * @param gui-ip-address The ip of the game sending the message.
+  * @param gui-port The port of the game sending the message.
+  * 
+  * @return If the game ends, "TIE." or "CHECKMATE|$P.", where $P is the winner player ("B" for black or "W" for white).
+  *         If the game does not end, it may return three things:
+  *				# "NO.", if the play is invalid.
+  *				# "CHECK|$B.", (with $B being the resulting board) if it is a valid play and the opponent player is in check.
+  *				# "YES|$B.", (with $B being the resulting board) if it is a valid play and none of the above happened.
+  */
+-> PLAY|<board>|<lin-ori>|<col-ori>|<lin-dest>|<col-dest>|<black-player>|<white-player>[<gui-ip-address>|<gui-port>]?
+		<- YES|<board-res>.
+		<- NO.
+		<- CHECK|<board-res>.
+		<- CHECKMATE|<win-player-str>.
+		<- TIE.
