@@ -16,6 +16,7 @@
 #endif
 #ifdef _WIN32
 #include <WinSock2.h>
+#include <windows.h>
 
 #define perror(s) \
 		fprintf(stderr,"\n%s %d\n", s, WSAGetLastError())
@@ -25,6 +26,7 @@
 
 #include <string>
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
@@ -44,8 +46,6 @@ private:
 #ifdef __linux__
 	unsigned int socketDescriptor;
 #elif defined _WIN32
-	WORD wVersionRequested;
-	WSADATA wsaData;
 	SOCKET socketDescriptor;
 #endif
 	struct sockaddr_in server;
@@ -53,8 +53,8 @@ private:
 
 public:
 	Socket();
-	Socket(string address);
-	void open(string address);
+	Socket(string address, unsigned int port);
+	void open(string address, unsigned int port);
 	void sendMsg(string msg);
 	string readMsg(bool nonblock = true);
 	void disconnect();

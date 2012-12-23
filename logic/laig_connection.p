@@ -18,16 +18,20 @@ dispatch(AcceptFd) :-
 
 process_client(Socket, Peer) :-
         tcp_open_socket(Socket, In, Out),
-        writeln('Received something'),
-        read(In,Msg),
-        writeln(Msg),
-        parse_input(Msg, Answer),
-        writeln(Answer),
-        write(Out,Answer),
-        nl(Out),
-        flush_output(Out),
-        close_connection(In, Out).
-
+        writeln('Connection established with new client'),
+		process_msg(In,Out).
+        %close_connection(In, Out).
+		
+process_msg(In, Out) :-
+	read(In,Msg),
+    writeln(Msg),
+    parse_input(Msg, Answer),
+    writeln(Answer),
+    write(Out,Answer),
+    nl(Out),
+    flush_output(Out),
+	process_msg(In, Out).
+	
 close_connection(In, Out) :-
         close(In, [force(true)]),
         close(Out, [force(true)]).
@@ -53,6 +57,8 @@ parse_input(draw(BoardStr),Answer) :-
 parse_input(checkmate(BoardStr,PlayerColor),Answer) :-
     make_check_mate_verification(BoardStr,PlayerColor,Answer).
 
+parse_input(close,bye).
+	
 parse_input(_,Answer) :-
     Answer = 'undefined message'.
     

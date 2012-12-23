@@ -36,10 +36,12 @@ int main(int argc, char* argv[])
 	return 0;
  */
    
-    
-    Socket sock = Socket("127.0.0.1");
-    
-    sock.sendMsg("ready.\n");
-    string ans = sock.readMsg();
-    cout << ans << endl;
+	Socket sock = Socket("127.0.0.1",60001);
+
+	sock.sendMsg("ready.\n");
+	string ans = sock.readMsg();
+	cout << ans << endl;
+
+	cin.get();
+	
 }
