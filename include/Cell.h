@@ -1,15 +1,28 @@
 #ifndef CELL_H
-#define	CELL_H
+#define CELL_H
 
-class Cell
+#include "Object.h"
+#include "Patch.h"
+#include "magicNumbers.h"
+
+class Cell: public Object
 {
+private:
+	int id;
+	Patch* shape;
+
 public:
-	unsigned int row;
-	unsigned int col;
-	
-	Cell() {};
-	Cell(unsigned int row, unsigned int col) {this->row = row; this->col = col;}
+	Cell();
+	Cell(Patch* patch);
+	~Cell();
+
+	int getID();
+	void setID(int i);
+	void setPosition(int id);
+	unsigned int getRow();
+	unsigned int getCol();
+
+	void draw();
 };
 
-#endif	/* CELL_H */
-
+#endif

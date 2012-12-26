@@ -139,7 +139,7 @@ int PolyLineAnimation::updateObjectPosition(){
 			}
 			
 		}	
-		if(current_animation_ind == 0 && obj->getAngXZ() == 0){//to ensure object rotates properly before the first animation stint
+		if(current_animation_ind == 0 && obj->getAng_XZ() == 0){//to ensure object rotates properly before the first animation stint
 			rotateObject();
 		}
 	}
@@ -271,9 +271,9 @@ void PolyLineAnimation::reset(){
 
 	this->current_animation_ind = this->reset_to_segment;
 
-	obj->setPosX(animSegments.at(current_animation_ind)->getObj_ini_postion_x());
-	obj->setPosY(animSegments.at(current_animation_ind)->getObj_ini_postion_y());
-	obj->setPosZ(animSegments.at(current_animation_ind)->getObj_ini_postion_z());
+	obj->setPos_x(animSegments.at(current_animation_ind)->getObj_ini_postion_x());
+	obj->setPos_y(animSegments.at(current_animation_ind)->getObj_ini_postion_y());
+	obj->setPos_z(animSegments.at(current_animation_ind)->getObj_ini_postion_z());
 
 	animSegments.at(current_animation_ind)->init();
 	rotateObject();

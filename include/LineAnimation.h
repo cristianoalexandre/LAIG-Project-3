@@ -7,8 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
-#include <cmath>
-
+#include <math.h>
 
 using namespace std;
 
@@ -18,7 +17,6 @@ typedef pair<vector<double>*,vector<double>*> ctrlPointsPair;
 class LineAnimation: public Animation
 {
 private:
-
 	double delta_x;
 	double delta_y;
 	double delta_z;

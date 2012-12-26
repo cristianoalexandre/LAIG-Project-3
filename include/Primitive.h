@@ -8,7 +8,20 @@
 
 using namespace std;
 
-class Primitive : public Object
+typedef struct
+{
+    float x;
+    float y;
+} Vertex2D;
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+} Vertex3D;
+
+class Primitive: public Object
 {
 private:
     string id;

@@ -16,7 +16,7 @@ Patch::Patch(int order_u, int order_v, int divisions_u, int divisions_v, GLfloat
 
     this->order_u = order_u;
     this->order_v = order_v;
-    
+
     switch (this->order_u)
     {
     case 1:
@@ -32,7 +32,7 @@ Patch::Patch(int order_u, int order_v, int divisions_u, int divisions_v, GLfloat
         cerr << "Invalid order_u in patch creation!";
         exit(-1);
     }
-    
+
     switch (this->order_v)
     {
     case 1:
@@ -102,14 +102,12 @@ void Patch::draw()
     glGetIntegerv(GL_CULL_FACE_MODE, &cull_face_mode);
 
     if (glIsEnabled(GL_CULL_FACE))
-    {
         if (cull_face_mode == GL_FRONT)
             glCullFace(GL_BACK);
         else if (cull_face_mode == GL_BACK)
             glCullFace(GL_FRONT);
         else
             glCullFace(GL_FRONT_AND_BACK);
-    }
 
     /** Declarates of vertex and texture evaluators */
     glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, stride_u, order_u + 1, 0.0, 1.0, stride_v, order_v + 1, &control_points[0][0]);

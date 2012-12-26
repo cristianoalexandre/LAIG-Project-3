@@ -40,7 +40,7 @@ void Socket::open(string address, unsigned int port)
 #elif defined _WIN32
 	if (connect(socketDescriptor, (struct sockaddr *)&server, sizeof server) == SOCKET_ERROR)
 	{
-		perror("");
+		//perror("");
 		cerr << "Problem while connecting to the socket. Please make sure the Prolog game server is running.";
 		cin.get();
 		exit(-1);

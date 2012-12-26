@@ -37,8 +37,6 @@ public:
 	bool isAnimationActive();
 	Object* getAnimatedObject();
 	
-
-	
 	void setTotalTime(int totalTime);
 	void setResetSegment(int ind);
 	void setTotalDistance(double dist);

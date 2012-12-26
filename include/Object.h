@@ -3,9 +3,8 @@
 
 #include "CGFobject.h"
 #include "CGFappearance.h"
-#include "Point.h"
 
-#include <cstdio>
+#include <stdio.h>
 #include <iostream>
 
 #define NUM_COORD 3
@@ -13,55 +12,58 @@
 #define Y 1
 #define Z 2
 
-class Object : public CGFobject
-{
+class Object: public CGFobject{
+
 private:
-    
-    Point3D pos;
-    
-    double angXY;
-    double angXZ;
-    double angZY;
+	double pos_x;
+	double pos_y;
+	double pos_z;
 
-    double orientationVector[NUM_COORD];
-    double upVector[NUM_COORD];
+	double ang_XY;
+	double ang_XZ;
+	double ang_ZY;
 
-    CGFappearance * appearance;
+	double orientation_vector[NUM_COORD];
+	double up_vector[NUM_COORD];
 
-    bool animate;
+	CGFappearance * appearance;
+
+	bool animate;
 
 public:
-    Object();
-    ~Object();
+	Object();
+	~Object();
 
-    void setPosX(double x);
-    void setPosY(double y);
-    void setPosZ(double z);
-    void setAnimated(bool anim);
-    void setRotationAngleOnZZaxis(double ang);
-    void setRotationAngleOnYYaxis(double ang);
-    void setRotationAngleOnXXaxis(double ang);
-    void setUpVector(double vector[NUM_COORD]);
-    void setOrientationVector(double vector[NUM_COORD]);
+	void setPos_x(double x);
+	void setPos_y(double y);
+	void setPos_z(double z);
+	void setAnimated(bool anim);
+	void setRotationAngleOnZZaxis(double ang);
+	void setRotationAngleOnYYaxis(double ang);
+	void setRotationAngleOnXXaxis(double ang);
+	void setUpVector(double vector[NUM_COORD]);
+	void setOrientationVector(double vector[NUM_COORD]);
 
-    double getPosX();
-    double getPosY();
-    double getPosZ();
-    double getAngXZ();
-    double getAngXY();
-    double getAngZY();
-    double* getUpVector();
-    double* getOrientationVector();
+	double getPos_x();
+	double getPos_y();
+	double getPos_z();
+	double getAng_XZ();
+	double getAng_XY();
+	double getAng_ZY();
+	double* getUpVector();
+	double* getOrientationVector();
 
-    bool getAnimated();
-    CGFappearance* getTexture();
+	bool getAnimated();
+	CGFappearance* getTexture();
 
-    void updateToPosition(double x, double y, double z);
-    void updatePosition(double delta_x, double delta_y, double delta_z);
 
-    void applyTransforms();
-    virtual void draw();
-    virtual void setTexture(CGFappearance * appearance);
+	void updateToPosition(double x, double y, double z);
+	void updatePosition(double delta_x, double delta_y, double delta_z);
+
+	void applyTransforms();
+	virtual void draw(); //virtual trouble
+	virtual void setTexture(CGFappearance * appearance);
+
 };
 
 

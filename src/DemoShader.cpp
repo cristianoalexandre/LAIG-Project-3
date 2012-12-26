@@ -7,7 +7,7 @@
 
 DemoShader::DemoShader()
 {
-    init("./shaders/lightMapping.vert", "./shaders/lightMapping.frag");
+    init("../shaders/lightMapping.vert", "../shaders/lightMapping.frag");
     //init("../shaders/textureDemo2.vert", "../shaders/textureDemo2.frag");
 
     CGFshader::bind();
@@ -19,8 +19,10 @@ DemoShader::DemoShader()
     // Store Id for the uniform "normScale", new value will be stored on bind()
     scaleLoc = glGetUniformLocation(id(), "normScale");
 
-    baseTexture = new CGFtexture("./textures/speckles.png");
-    secTexture = new CGFtexture("./textures/rock.png");
+    baseTexture = new CGFtexture("../textures/speckles.png");
+    secTexture = new CGFtexture("../textures/rock.png");
+	/*baseTexture = new CGFtexture("../textures/LAIG-heightmap.jpg");
+    secTexture = new CGFtexture("../textures/LAIG-text.jpg");*/
 
     // get the uniform location for the sampler
     baseImageLoc = glGetUniformLocation(id(), "firstImage");

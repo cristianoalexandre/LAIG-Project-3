@@ -2,43 +2,19 @@
 
 #include "GameScene.h"
 #include "Patch.h"
+#include "FlyingDisk.h"
 
 unsigned int LineAnimation::mili_secs = 0;
+unsigned int PieceAnimation::mili_secs = 0;
+
+int Ring::numberExistingRings = 0;
+
+PieceAnimation* animP;
 
 void updateTransforms(int dummy)
 {
-    for (unsigned int i = 0; i < allPolyAnimations.size(); i++)
-    {
-        allPolyAnimations[i]->updateObjectPosition();
-    }
-
-    glutTimerFunc(LineAnimation::getMiliSecs(), updateTransforms, dummy);
-}
-
-void myGlutIdle(void)
-{
-    /* According to the GLUT specification, the current window is 
-       undefined during an idle callback.  So we need to explicitly change
-       it if necessary */
-    //if ( glutGetWindow() != main_window ) 
-    //glutSetWindow(main_window);  
-    glutSetWindow(glutGetWindow());
-
-    glutPostRedisplay();
-
-    /****************************************************************/
-    /*            This demonstrates GLUI::sync_live()               */
-    /*   We change the value of a variable that is 'live' to some   */
-    /*   control.  We then call sync_live, and the control          */
-    /*   associated with that variable is automatically updated     */
-    /*   with the new value.  This frees the programmer from having */
-    /*   to always remember which variables are used by controls -  */
-    /*   simply change whatever variables are necessary, then sync  */
-    /*   the live ones all at once with a single call to sync_live  */
-    /****************************************************************/
-
-    //  glui->sync_live();
-
+    animP->update();
+    glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, dummy);
 }
 
 void GameScene::init()
@@ -51,12 +27,25 @@ void GameScene::init()
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, CGFlight::background_ambient);
 
     /** Lights initialization */
-    float light0_pos[4] = {5.0, 4.0, 5.0, 1.0};
+    float light0_pos[4] = {-4.0, 20.0, 5.0, 1.0};
     light0 = new CGFlight(GL_LIGHT0, light0_pos);
     light0->enable();
 
+    float light1_pos[4] = {8.0, 20.0, 5.0, 1.0};
+    light1 = new CGFlight(GL_LIGHT1, light1_pos);
+    light1->enable();
+
+    float light2_pos[4] = {-4.0, 20.0, 10.0, 1.0};
+    light2 = new CGFlight(GL_LIGHT2, light2_pos);
+    light2->enable();
+
+    float light3_pos[4] = {8.0, 20.0, 10.0, 1.0};
+    light3 = new CGFlight(GL_LIGHT3, light3_pos);
+    light3->enable();
+
     /** Defines a default normal */
     glNormal3f(0, 0, 1);
+
 
     /** Materials initialization */
     materialAppearance = new CGFappearance();
@@ -64,11 +53,20 @@ void GameScene::init()
     tentAppearance = new CGFappearance("../textures/tent.jpg", GL_REPEAT, GL_REPEAT);
 
     /** Object initialization */
+    torus = new TorusHitbox();
+    p = new Piece();
+    p->moveToCell(20);
+    model1 = new Model("../models/rook.obj");
 
-    /** Shaders declaration */
+    PieceAnimation::setMiliSecs(10);
+    animP = new PieceAnimation();
+    animP->setPiece(p);
+    animP->setMovement(32, 1, 1);
 
-    /** Set the update period */
-    setUpdatePeriod(30);
+    glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, 0);
+    //setUpdatePeriod(PieceAnimation::getMiliSecs());
+    /** Shaders declaration*/
+
 }
 
 void GameScene::display()
@@ -84,33 +82,39 @@ void GameScene::display()
     CGFscene::activeCamera->applyView();
 
     /** Draw axis */
-    axis.draw();
+    //axis.draw();
 
     /** Draw lights */
     light0->draw();
+    light1->draw();
+    light2->draw();
+    light3->draw();
 
     /** Setting the cullface and frontface */
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    /** ===== DRAW OBJECTS START ===== */
+    /** Draw objects */
 
-    /** Draw dynamic objects */
+    //glutSolidTorus(3,5,50,50);
+    glPushMatrix();
+    //torus->draw();
+    glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
+    //glutSolidTorus(1.5, 2.5, 50, 50);
+    glPopMatrix();
 
-    for (unsigned int i = 0; i < allPolyAnimations.size(); i++)
-    {
-        allPolyAnimations[i]->animate();
-    }
-
-    /** Draw static objects */
-
-    /** ===== DRAW OBJECTS END ===== */
+    //p->draw();
+    glPushMatrix();
+    glScalef(5,5,5);
+    model1->draw();
+    glPopMatrix();
 
     glutSwapBuffers();
 }
 
 void GameScene::update(long t)
 {
+    //updateTransforms(30);
 }
 
 GameScene::~GameScene()

@@ -2,7 +2,6 @@
 
 LineAnimation::LineAnimation()
 {
-
     setDelta_x(0.0);
     setDelta_y(0.0);
     setDelta_z(0.0);
@@ -35,19 +34,20 @@ void LineAnimation::setDelta_z(double z)
 
 void LineAnimation::setObj_ini_position_x(double ini_x)
 {
-    this->obj_ini_postion_x = ini_x;
+
+    this->obj_ini_postion_x;
 }
 
 void LineAnimation::setObj_ini_position_y(double ini_y)
 {
 
-    this->obj_ini_postion_y = ini_y;
+    this->obj_ini_postion_y;
 }
 
 void LineAnimation::setObj_ini_position_z(double ini_z)
 {
 
-    this->obj_ini_postion_z = ini_z;
+    this->obj_ini_postion_z;
 }
 
 void LineAnimation::setMiliSecs(unsigned int mSecs)
@@ -184,20 +184,20 @@ ctrlPointsPair* LineAnimation::getControlPoints() const
 void LineAnimation::checkDeltas(double dx, double dy, double dz)
 {
 
-    if ((animatedObject->getPosX() + dx) > obj_end_postion_x)
+    if ((animatedObject->getPos_x() + dx) > obj_end_postion_x)
     {
 
-        setDelta_x(obj_end_postion_x - animatedObject->getPosX());
+        setDelta_x(obj_end_postion_x - animatedObject->getPos_x());
     }
-    if ((animatedObject->getPosY() + dy) > obj_end_postion_y)
+    if ((animatedObject->getPos_y() + dy) > obj_end_postion_y)
     {
 
-        setDelta_y(obj_end_postion_y - animatedObject->getPosY());
+        setDelta_y(obj_end_postion_y - animatedObject->getPos_y());
     }
-    if ((animatedObject->getPosZ() + dz) > obj_end_postion_z)
+    if ((animatedObject->getPos_z() + dz) > obj_end_postion_z)
     {
 
-        setDelta_x(obj_end_postion_z - animatedObject->getPosZ());
+        setDelta_x(obj_end_postion_z - animatedObject->getPos_z());
     }
 }
 
@@ -222,9 +222,9 @@ void LineAnimation::init()
     delta_y = (LineAnimation::getMiliSecs() / (total_animation_time * 1000)) * total_delta_y;
     delta_z = (LineAnimation::getMiliSecs() / (total_animation_time * 1000)) * total_delta_z;
 
-    obj_ini_postion_x = this->animatedObject->getPosX();
-    obj_ini_postion_y = this->animatedObject->getPosY();
-    obj_ini_postion_z = this->animatedObject->getPosZ();
+    obj_ini_postion_x = this->animatedObject->getPos_x();
+    obj_ini_postion_y = this->animatedObject->getPos_y();
+    obj_ini_postion_z = this->animatedObject->getPos_z();
 
     obj_end_postion_x = obj_ini_postion_x + total_delta_x;
     obj_end_postion_y = obj_ini_postion_y + total_delta_y;
@@ -235,22 +235,22 @@ void LineAnimation::init()
 int LineAnimation::updateObjectPosition()
 {
 
-    if (fabs(animatedObject->getPosX() - obj_ini_postion_x) >= fabs(total_delta_x))
+    if (fabs(animatedObject->getPos_x() - obj_ini_postion_x) >= fabs(total_delta_x))
     {
         setDelta_x(0);
     }
-    if (fabs(animatedObject->getPosY() - obj_ini_postion_y) >= fabs(total_delta_y))
+    if (fabs(animatedObject->getPos_y() - obj_ini_postion_y) >= fabs(total_delta_y))
     {
         setDelta_y(0);
     }
-    if (fabs(animatedObject->getPosZ() - obj_ini_postion_z) >= fabs(total_delta_z))
+    if (fabs(animatedObject->getPos_z() - obj_ini_postion_z) >= fabs(total_delta_z))
     {
         setDelta_z(0);
     }
 
-    if (fabs(animatedObject->getPosX() - obj_ini_postion_x) >= fabs(total_delta_x) &&
-            fabs(animatedObject->getPosY() - obj_ini_postion_y) >= fabs(total_delta_y) &&
-            fabs(animatedObject->getPosZ() - obj_ini_postion_z) >= fabs(total_delta_z))
+    if (fabs(animatedObject->getPos_x() - obj_ini_postion_x) >= fabs(total_delta_x) &&
+            fabs(animatedObject->getPos_y() - obj_ini_postion_y) >= fabs(total_delta_y) &&
+            fabs(animatedObject->getPos_z() - obj_ini_postion_z) >= fabs(total_delta_z))
     {
         return 1;
     }

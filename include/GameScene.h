@@ -1,11 +1,6 @@
 #ifndef GAMESCENE_H
 #define	GAMESCENE_H
 
-#include "Plane.h"
-#include "Patch.h"
-#include "Tent.h"
-#include "Terrain.h"
-
 #include "CGFscene.h"
 #include "CGFappearance.h"
 #include "CGFaxis.h"
@@ -16,12 +11,15 @@
 
 #include "LineAnimation.h"
 #include "PolyLineAnimation.h"
+#include "PieceAnimation.h"
 
 #include "Cylinder.h"
 #include "Triangle.h"
 #include "Sphere.h"
 
-#include "Game.h"
+#include "TorusHitbox.h"
+#include "Piece.h"
+#include "Model.h"
 
 #include <math.h>
 #include <vector>
@@ -34,18 +32,19 @@ public:
     void init();
     void display();
     void update(long t);
+    void drawModel_box();
     ~GameScene();
 
 private:
     static const long update_time = 30;
 
-    /** Game-related objects */
-    Game toruschess;
-
     /** Lights declaration */
     CGFlight * light0;
+    CGFlight * light1;
+    CGFlight * light2;
+    CGFlight * light3;
 
-    GLuint scene;
+    GLuint cena;
 
     /** Appearances declaration */
     CGFappearance* materialAppearance;
@@ -53,9 +52,12 @@ private:
     CGFappearance* tentAppearance;
 
     /** Primitives declaration */
-
+    Piece* p;
+    TorusHitbox* torus;
 
     /** Shaders declaration */
+    DemoShader * shader1;
+    Model * model1;
 };
 
-#endif	/* LAIGSCENE_H */
+#endif	/* GAMESCENE_H */

@@ -5,24 +5,27 @@
 
 #include <iostream>
 
-class Rectangle : public Primitive
+
+class Rectangle: public Primitive
 {
 private:
-    Point2D bottomLeftVertex;
-    Point2D upperRightVertex;
+	Vertex2D bottomLeftVertex;
+	Vertex2D upperRightVertex;
 
 public:
-    Rectangle();
-    Rectangle(Point2D downLeftVertex, Point2D upRightVertex);
-    virtual ~Rectangle();
+	Rectangle();
+	Rectangle(Vertex2D downLeftVertex, Vertex2D upRightVertex);
+	virtual ~Rectangle();
+	
+	void setDownLeftX(float x);
+	void setDownLeftY(float y);
 
-    void setDownLeftX(float x);
-    void setDownLeftY(float y);
+	void setUpRightX(float x);
+	void setUpRightY(float y);
 
-    void setUpRightX(float x);
-    void setUpRightY(float y);
-
-    void draw();
+	virtual int addValues(string attr, string val);
+	
+	void draw();
 };
 
 

@@ -37,8 +37,7 @@ void DemoScene::update(long t)
 {
 	shader->bind();
 	shader->update(t/400.0);
-	shader->unbind();
-	
+	shader->unbind();	
 }
 	
 void DemoScene::display() 

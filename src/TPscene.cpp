@@ -58,9 +58,9 @@ void TPscene::display()
 	// Translate (5, 0, 2)
 	
 	float tra[16] = { 1.0, 0.0, 0.0, 0.0,
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      5.0, 0.0, 2.0, 1.0};
+					  0.0, 1.0, 0.0, 0.0,
+					  0.0, 0.0, 1.0, 0.0,
+					  5.0, 0.0, 2.0, 1.0};
 
 	// Rotate 30 degrees around Y
 	// These constants would normally be pre-computed at initialization time
@@ -71,15 +71,15 @@ void TPscene::display()
 	float sin_a = sin(a_rad);
 
 	float rot[16] = { cos_a,  0.0,  -sin_a,  0.0,
-                      0.0,    1.0,   0.0,    0.0,
-                      sin_a,  0.0,   cos_a,  0.0,
-                      0.0,    0.0,   0.0,    1.0};
+					  0.0,    1.0,   0.0,    0.0,
+					  sin_a,  0.0,   cos_a,  0.0,
+					  0.0,    0.0,   0.0,    1.0};
 
 	// Scaling by (2,2,1)
 	float sca[16] = { 2.0, 0.0, 0.0, 0.0,
-                      0.0, 2.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
+					  0.0, 2.0, 0.0, 0.0,
+					  0.0, 0.0, 1.0, 0.0,
+					  0.0, 0.0, 0.0, 1.0};
 
 	// Multiplication of the previous transformations
 	// glMultMatrixf(tra);     // GT = GT * tra
@@ -92,7 +92,7 @@ void TPscene::display()
 
 	// ---- BEGIN Primitive drawing section
 
-    // NOTE: the visible face of the polygon is determined by the order of the vertices
+	// NOTE: the visible face of the polygon is determined by the order of the vertices
 
 	glBegin(GL_QUADS);
 		glVertex3d(0,0,0);

@@ -61,15 +61,13 @@ void Plane::draw()
     glGetIntegerv(GL_CULL_FACE_MODE, &cull_face_mode);
 
     if (glIsEnabled(GL_CULL_FACE))
-    {
         if (cull_face_mode == GL_FRONT)
             glCullFace(GL_BACK);
         else if (cull_face_mode == GL_BACK)
             glCullFace(GL_FRONT);
         else
             glCullFace(GL_FRONT_AND_BACK);
-    }
-
+    
     /** Declaration of vertex and texture evaluators */
     glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, 2, 0.0, 1.0, 6, 2, &control_points[0][0]);
     glMap2f(GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2, &texture_points[0][0]);
@@ -88,7 +86,7 @@ void Plane::draw()
     /** Draw the whole thing */
     glEvalMesh2(GL_FILL, 0, divisions[0], 0, divisions[1]);
 
-
+    
     if (glIsEnabled(GL_CULL_FACE))
         glCullFace(cull_face_mode);
 }

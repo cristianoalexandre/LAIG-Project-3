@@ -2,5 +2,5 @@
 
 unsigned int Move::type()
 {
-	return MOVE;
+    return MOVE;
 }

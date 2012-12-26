@@ -6,29 +6,29 @@ Play::Play()
 
 Play::Play(int srcCellRow, int srcCellCol, int destCellRow, int destCellCol, Piece piece)
 {
-    srcCell = Cell(srcCellRow, srcCellCol);
-    destCell = Cell(destCellRow, destCellCol);
+    //srcCell = Cell(srcCellRow, srcCellCol);
+    //destCell = Cell(destCellRow, destCellCol);
     this->piece = piece;
 }
 
 unsigned int Play::getSrcCellRow()
 {
-    return srcCell.row;
+    return srcCell.getRow();
 }
 
 unsigned int Play::getSrcCellCol()
 {
-    return srcCell.col;
+    return srcCell.getCol();
 }
 
 unsigned int Play::getDestCellRow()
 {
-    return destCell.row;
+    return destCell.getRow();
 }
 
 unsigned int Play::getDestCellCol()
 {
-    return destCell.col;
+    return destCell.getCol();
 }
 
 string Play::toString()

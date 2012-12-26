@@ -30,6 +30,7 @@ process_msg(In, Out) :-
     write(Out,Answer),
     nl(Out),
     flush_output(Out),
+	writeln(Answer),
 	process_msg(In, Out).
 	
 close_connection(In, Out) :-
