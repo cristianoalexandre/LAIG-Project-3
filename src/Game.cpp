@@ -12,7 +12,7 @@ void Game::viewReplay()
 {
 }
 
-void Game::makePlay(Play newPlay)
+void Game::makePlay(Play* newPlay)
 {
 }
 
@@ -59,9 +59,9 @@ bool Game::parseDrawMsg(string msg)
     return false;
 }
 
-Board Game::parsePlayMsg(string msg)
+Board* Game::parsePlayMsg(string msg)
 {
-    return Board();
+    return new Board();
 }
 
 bool Game::parseReadyMsg(string msg)
@@ -69,7 +69,7 @@ bool Game::parseReadyMsg(string msg)
     return false;
 }
 
-vector <Cell> Game::parseSelectMsg(string msg)
+vector <Cell*> Game::parseSelectMsg(string msg)
 {
-    return vector<Cell>();
+    return vector<Cell*>();
 }

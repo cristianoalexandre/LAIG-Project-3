@@ -4,7 +4,6 @@
 #include <sstream>
 #include <string>
 
-#include "Piece.h"
 #include "Cell.h"
 
 #define GENERIC 0
@@ -16,13 +15,14 @@ using namespace std;
 class Play
 {
 protected:
-    Cell srcCell;
-    Cell destCell;
-    Piece piece;
+    Cell* srcCell;
+    Cell* destCell;
+    Piece* piece;
 public:
 
     Play();
-    Play(int srcCellRow, int srcCellCol, int destCellRow, int destCellCol, Piece piece);
+	~Play();
+    Play(int srcCellRow, int srcCellCol, int destCellRow, int destCellCol, Piece* piece);
     unsigned int getSrcCellRow();
     unsigned int getSrcCellCol();
     unsigned int getDestCellRow();

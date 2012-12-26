@@ -28,28 +28,28 @@ void TorusHitbox::draw()
 {	
 	
 	glPushMatrix();
-		glRotatef(22.5,0,0,1);
+		glRotatef(-22.5,0,0,1);
 		ring1->draw();
 		glPushMatrix();
-			glRotatef(45,0,0,1);
+			glRotatef(-45,0,0,1);
 			ring2->draw();
 			glPushMatrix();
-				glRotatef(45,0,0,1);
+				glRotatef(-45,0,0,1);
 				ring3->draw();
 				glPushMatrix();
-					glRotatef(45,0,0,1);
+					glRotatef(-45,0,0,1);
 					ring4->draw();
 					glPushMatrix();
-						glRotatef(45,0,0,1);
+						glRotatef(-45,0,0,1);
 						ring5->draw();
 						glPushMatrix();
-							glRotatef(45,0,0,1);
+							glRotatef(-45,0,0,1);
 							ring6->draw();
 							glPushMatrix();
-								glRotatef(45,0,0,1);
+								glRotatef(-45,0,0,1);
 								ring7->draw();
 								glPushMatrix();
-									glRotatef(45,0,0,1);
+									glRotatef(-45,0,0,1);
 									ring8->draw();
 								glPopMatrix();
 							glPopMatrix();

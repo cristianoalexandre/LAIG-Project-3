@@ -1,10 +1,12 @@
 #include <iostream>
 #include <exception>
 
-#include "CGFapplication.h"
-#include "GameScene.h"
 #include "TPscene.h"
 #include "DemoScene.h"
+
+#include "CGFapplication.h"
+#include "GameScene.h"
+#include "PickInterface.h"
 
 using std::cout;
 using std::exception;
@@ -12,13 +14,16 @@ using std::exception;
 int main(int argc, char* argv[])
 {
     CGFapplication app = CGFapplication();
+	GameScene* s = new GameScene();
+	PickInterface* pick = new PickInterface();
+	pick->setScene(s);
 
     try
     {
         app.init(&argc, argv);
 
-        app.setScene(new GameScene());
-        app.setInterface(new CGFinterface());
+        app.setScene(s);
+        app.setInterface(pick);
 
         app.run();
     }

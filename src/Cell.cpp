@@ -1,39 +1,45 @@
 #include "Cell.h"
 
-Cell::Cell()
-{
+
+
+Cell::Cell(){
+	this->shape = NULL;
+	this->piece = NULL;
+}
+
+Cell::Cell(Patch* eval){
+
+	this->shape = eval;
+	this->piece = NULL;
+}
+
+int Cell::getID(){
+
+	return this->id;
+}
+
+void Cell::setID(int i){
+
+	this->id = i;
+	setPosition(i);
 
 }
 
-Cell::Cell(Patch* eval)
-{
-    this->shape = eval;
+
+void Cell::draw(){
+
+	this->shape->draw();
+	if(this->piece != NULL){
+		this->piece->draw();
+	}
 }
 
-Cell::~Cell()
-{
+void Cell::setPiece(Piece* p){
 
+	this->piece = p;
+	piece->setCurrentCellID(this->id);
 }
 
-int Cell::getID()
-{
-
-    return this->id;
-}
-
-void Cell::setID(int i)
-{
-
-    this->id = i;
-    setPosition(i);
-
-}
-
-void Cell::draw()
-{
-
-    this->shape->draw();
-}
 
 void Cell::setPosition(int i)
 {

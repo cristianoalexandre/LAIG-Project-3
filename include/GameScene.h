@@ -17,9 +17,9 @@
 #include "Triangle.h"
 #include "Sphere.h"
 
-#include "TorusHitbox.h"
 #include "Piece.h"
 #include "Model.h"
+#include "Board.h"
 
 #include <math.h>
 #include <vector>
@@ -53,7 +53,7 @@ private:
 
     /** Primitives declaration */
     Piece* p;
-    TorusHitbox* torus;
+    Board* torus;
 
     /** Shaders declaration */
     DemoShader * shader1;

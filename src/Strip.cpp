@@ -143,34 +143,45 @@ Cell* Strip::getBottom(){
 
 void Strip::draw() 
 {	
-
 	double v = 1.0825; //calculus rounding error adjustment factor
-	glPushMatrix();
+
+
+	glPushMatrix();		
+	glPushName(-1);
 		//Scalef(v,1,1);
 		glTranslatef(0,4,0);
 		glPushMatrix();
+			glLoadName(this->top->getID());
 			glRotatef(22.5,1,0,0);
 			glTranslatef(0,0,delta_z/2);
 			top->draw();
 			glPushMatrix();
+				glLoadName(this->middleTop->getID());
 				glTranslatef(0,0,delta_z/2);
 				glRotatef(45,1,0,0);
 				glTranslatef(0,0,delta_z/2);
 				middleTop->draw();
 				glPushMatrix();
+					glLoadName(this->middleBottom->getID());
 					glTranslatef(0,0,delta_z/2);
 					glRotatef(45,1,0,0);
 					glTranslatef(0,0,delta_z/2);
 					middleBottom->draw();
 					glPushMatrix();
+						glLoadName(this->bottom->getID());
 						glTranslatef(0,0,delta_z/2);
 						glRotatef(45,1,0,0);
 						glTranslatef(0,0,delta_z/2);
 						bottom->draw();
+						glPopName();
 					glPopMatrix();
+				glPopName();
 				glPopMatrix();
+			glPopName();
 			glPopMatrix();
+		glPopName();
 		glPopMatrix();
+	glPopName();
 	glPopMatrix();
 
 	//glutSolidTorus(1.5,2.5,50,50);

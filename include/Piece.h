@@ -11,7 +11,7 @@ using namespace std;
 class Piece: public Object
 {
 private:
-	string id;
+	char type;
 	int currentCell_ID;
 
 	double rotationAngle_XX;
@@ -19,7 +19,7 @@ private:
 
 public:
 	Piece();
-
+	Piece(char t);
 
 	int getCurrentCell();
 	double get_XX_Angle();

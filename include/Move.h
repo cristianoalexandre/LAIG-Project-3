@@ -11,7 +11,7 @@ private:
 
 public:
 	Move() : Play() {};
-	Move(int srcCellRow, int srcCellCol, int destCellRow, int destCellCol, Piece piece)
+	Move(int srcCellRow, int srcCellCol, int destCellRow, int destCellCol, Piece* piece)
 		:Play(srcCellRow, srcCellCol, destCellRow, destCellCol, piece){};
 	unsigned int type();
 };

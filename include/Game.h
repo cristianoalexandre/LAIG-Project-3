@@ -10,7 +10,6 @@
 #include "Play.h"
 #include "AuxiliaryFunctions.h"
 #include "Board.h"
-#include "Cell.h"
 
 using namespace std;
 
@@ -24,22 +23,22 @@ using namespace std;
 class Game
 {
 private:
-	stack <Play> executedPlays;
+	stack <Play*> executedPlays;
 	int lastMessageType;
 public:
 	Game() ;
 	~Game();
 
 	void viewReplay();
-	void makePlay(Play newPlay);
+	void makePlay(Play* newPlay);
 	void parseMsg(string msg);
 
 	bool parseReadyMsg(string msg);
-	vector <Cell> parseSelectMsg(string msg);
-	Board parsePlayMsg(string msg);
-        bool parseCheckMsg(string msg);
-        bool parseCheckMateMsg(string msg);
-        bool parseDrawMsg(string msg);
+	vector <Cell*> parseSelectMsg(string msg);
+	Board* parsePlayMsg(string msg);
+    bool parseCheckMsg(string msg);
+    bool parseCheckMateMsg(string msg);
+    bool parseDrawMsg(string msg);
 };
 
 #endif	/* GAME_H */

@@ -53,17 +53,17 @@ void GameScene::init()
     tentAppearance = new CGFappearance("../textures/tent.jpg", GL_REPEAT, GL_REPEAT);
 
     /** Object initialization */
-    torus = new TorusHitbox();
+    torus = new Board();
     p = new Piece();
     p->moveToCell(20);
-    model1 = new Model("../models/rook.obj");
+    //model1 = new Model("../models/rook.obj");
 
-    PieceAnimation::setMiliSecs(10);
+    /*PieceAnimation::setMiliSecs(10);
     animP = new PieceAnimation();
     animP->setPiece(p);
     animP->setMovement(32, 1, 1);
 
-    glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, 0);
+    glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, 0);*/
     //setUpdatePeriod(PieceAnimation::getMiliSecs());
     /** Shaders declaration*/
 
@@ -98,16 +98,16 @@ void GameScene::display()
 
     //glutSolidTorus(3,5,50,50);
     glPushMatrix();
-    //torus->draw();
-    glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
+		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
+		torus->draw();
     //glutSolidTorus(1.5, 2.5, 50, 50);
     glPopMatrix();
 
-    //p->draw();
-    glPushMatrix();
-    glScalef(5,5,5);
-    model1->draw();
-    glPopMatrix();
+    p->draw();
+    /*glPushMatrix();
+		glScalef(5,5,5);
+		model1->draw();
+    glPopMatrix();*/
 
     glutSwapBuffers();
 }
