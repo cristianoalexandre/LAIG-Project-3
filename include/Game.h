@@ -36,9 +36,9 @@ public:
 	bool parseReadyMsg(string msg);
 	vector <Cell*> parseSelectMsg(string msg);
 	Board* parsePlayMsg(string msg);
-    bool parseCheckMsg(string msg);
-    bool parseCheckMateMsg(string msg);
-    bool parseDrawMsg(string msg);
+	bool parseCheckMsg(string msg);
+	bool parseCheckMateMsg(string msg);
+	bool parseDrawMsg(string msg);
 };
 
 #endif	/* GAME_H */

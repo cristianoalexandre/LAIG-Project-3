@@ -16,20 +16,16 @@ Model::~Model()
 }
 
 void Model::loadOBJ(string filename)
-{    
-    if (!model)
-    {
-        model = glmReadOBJ((char*) filename.c_str());
-    }
-    
-    if (!model) exit(-1);
+{
+    model = (GLMmodel*) malloc(sizeof (GLMmodel));
+    model = glmReadOBJ((char*) filename.c_str());
+
     glmUnitize(model);
-    glmFacetNormals(model);
-    glmVertexNormals(model,90.0);
+    //glmFacetNormals(model);
+    //glmVertexNormals(model, 90.0);
 }
 
 void Model::draw()
 {
-    Object::draw();
-    glmDraw(model, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(model, GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
 }

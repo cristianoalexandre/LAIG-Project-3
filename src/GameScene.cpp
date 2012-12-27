@@ -46,7 +46,6 @@ void GameScene::init()
     /** Defines a default normal */
     glNormal3f(0, 0, 1);
 
-
     /** Materials initialization */
     materialAppearance = new CGFappearance();
     textureAppearance = new CGFappearance("../textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
@@ -54,16 +53,16 @@ void GameScene::init()
 
     /** Object initialization */
     torus = new Board();
-    p = new Piece();
+    p = new Piece("rook", "white");
     p->moveToCell(20);
-    //model1 = new Model("../models/rook.obj");
+    //model1 = new Model("../models/whitePawn.obj");
 
-    /*PieceAnimation::setMiliSecs(10);
+    PieceAnimation::setMiliSecs(10);
     animP = new PieceAnimation();
     animP->setPiece(p);
     animP->setMovement(32, 1, 1);
 
-    glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, 0);*/
+    glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, 0);
     //setUpdatePeriod(PieceAnimation::getMiliSecs());
     /** Shaders declaration*/
 
@@ -73,16 +72,19 @@ void GameScene::display()
 {
     /** Clear image and depth buffer everytime we update the scene */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(1,1,1,1.0);
 
     /** Initialize Model-View matrix as identity (no transformation */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    /** Defines the background color */
+
     /** Apply transformations corresponding to the camera position relative to the origin */
     CGFscene::activeCamera->applyView();
 
     /** Draw axis */
-    //axis.draw();
+    axis.draw();
 
     /** Draw lights */
     light0->draw();
@@ -95,20 +97,13 @@ void GameScene::display()
     glCullFace(GL_BACK);
 
     /** Draw objects */
-
-    //glutSolidTorus(3,5,50,50);
     glPushMatrix();
-		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
-		torus->draw();
-    //glutSolidTorus(1.5, 2.5, 50, 50);
+    glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
+    torus->draw();
+    glColor3f(1.0, 1.0, 1.0);
     glPopMatrix();
 
-    p->draw();
-    /*glPushMatrix();
-		glScalef(5,5,5);
-		model1->draw();
-    glPopMatrix();*/
-
+    //p->draw();
     glutSwapBuffers();
 }
 

@@ -1,5 +1,6 @@
 #ifndef DEMOSHADER_H
 #define	DEMOSHADER_H
+
 #include "CGFshader.h"
 #include "CGFtexture.h"
 

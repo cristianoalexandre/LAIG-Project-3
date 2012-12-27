@@ -8,7 +8,4 @@
 
 #define SCALING_FACTOR 2
 
-
-
-
 #endif
