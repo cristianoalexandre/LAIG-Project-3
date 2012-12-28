@@ -113,3 +113,14 @@ Piece * Board::findPiece(Piece& pieceToFind)
         }
     }
 }
+
+string Board::toString()
+{
+    string toReturn = "";
+    
+    for (int i = 0; i < 8; i++)
+        for (int k = 0; k < 8; i++)
+        {
+            toReturn += board[i][k]->toString();
+        }
+}

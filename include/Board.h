@@ -21,10 +21,13 @@ private:
 
 public:
     Board();
+    Board(string boardStr);
 
     void draw();
     Piece * findPiece(Piece &pieceToFind);
     void setCellContent(int lin, int col, Piece * piece);
+
+    string toString();
 };
 
 #endif	/* BOARD_H */

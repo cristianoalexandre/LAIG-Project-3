@@ -76,7 +76,7 @@ translate_cell(piece(white,king),'k').
 
 translate_cell('k','piece(white,king)').
 translate_cell('q','piece(white,queen)').
-translate_cell('h','piece(white,knight)').
+translate_cell('n','piece(white,knight)').
 translate_cell('b','piece(white,bishop)').
 translate_cell('r','piece(white,rook)').
 translate_cell('p','piece(white,pawn)').

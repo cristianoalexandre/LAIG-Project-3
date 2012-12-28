@@ -16,6 +16,65 @@ Piece::Piece(string type, string color)
     initModel();
 }
 
+Piece::Piece(const char encoding)
+{
+    currentCell_ID = 0;
+
+    switch (encoding)
+    {
+    case 'g':
+        type = "king";
+        color = "black";
+        break;
+    case 'u':
+        type = "queen";
+        color = "black";
+        break;
+    case 'h':
+        type = "knight";
+        color = "black";
+        break;
+    case 'i':
+        type = "bishop";
+        color = "black";
+        break;
+    case 'o':
+        type = "rook";
+        color = "black";
+        break;
+    case 'a':
+        type = "pawn";
+        color = "black";
+        break;
+    case 'k':
+        type = "king";
+        color = "white";
+        break;
+    case 'q':
+        type = "queen";
+        color = "white";
+        break;
+    case 'n':
+        type = "knight";
+        color = "white";
+        break;
+    case 'b':
+        type = "bishop";
+        color = "white";
+        break;
+    case 'r':
+        type = "rook";
+        color = "white";
+        break;
+    case 'p':
+        type = "pawn";
+        color = "white";
+        break;
+    }
+
+    initModel();
+}
+
 Piece::~Piece()
 {
     delete model;
@@ -90,9 +149,9 @@ void Piece::draw()
 {
     glPushMatrix();
     glRotated(this->rotationAngle_ZZ, 0, 0, 1);
-	glTranslated(0, TORUS_OUTER_RADIUS-TORUS_INNER_RADIUS, 0);
+    glTranslated(0, TORUS_OUTER_RADIUS - TORUS_INNER_RADIUS, 0);
     glRotated(this->rotationAngle_XX, 1, 0, 0);
-	glTranslated(0, TORUS_INNER_RADIUS, 0);
+    glTranslated(0, TORUS_INNER_RADIUS, 0);
 
     //glRotated(this->rotationAngle_ZZ,0,0,1);
     //glTranslated(TORUS_OUTER_RADIUS, this->getPos_y(), this->getPos_z());
@@ -101,7 +160,7 @@ void Piece::draw()
     glTranslated(0, 0.5, 0);
     glutSolidCube(1);
      */
-    
+
     model->draw();
 
     glPopMatrix();
@@ -163,6 +222,55 @@ void Piece::setCell(int lin, int col)
         cerr << "setCell() - Invalid ID!";
         exit(-1);
     }
-    
+
     moveToCell(currentCell_ID);
+}
+
+string Piece::toString()
+{
+    if (color == "black")
+    {
+        if (type == "pawn")
+            return "a";
+        else if (type == "rook")
+            return "o";
+        else if (type == "bishop")
+            return "i";
+        else if (type == "knight")
+            return "h";
+        else if (type == "queen")
+            return "u";
+        else if (type == "king")
+            return "g";
+        else
+        {
+            cerr << "Problem in Piece::toString - unknown color";
+            exit(-1);
+        }
+    }
+    else if (color == "white")
+    {
+        if (type == "pawn")
+            return "p";
+        else if (type == "rook")
+            return "r";
+        else if (type == "bishop")
+            return "b";
+        else if (type == "knight")
+            return "n";
+        else if (type == "queen")
+            return "q";
+        else if (type == "king")
+            return "k";
+        else
+        {
+            cerr << "Problem in Piece::toString - unknown color";
+            exit(-1);
+        }
+    }
+    else
+    {
+        cerr << "Problem in Piece::toString - unknown color";
+        exit(-1);
+    }
 }
