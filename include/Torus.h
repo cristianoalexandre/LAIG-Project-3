@@ -1,9 +1,9 @@
 #ifndef TORUS_H
 #define TORUS_H
 
-#include "Primitive.h"
+#include "Object.h"
 
-class Torus: public Primitive
+class Torus: public Object
 {
 private:
 	float innerRadius;
@@ -21,9 +21,6 @@ public:
 	void setSlices(int slcs);
 	void setLoops(int loop);
 	void draw();
-
-	virtual int addValues(string attr, string val);
-
 };
 
 #endif

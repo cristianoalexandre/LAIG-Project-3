@@ -1,6 +1,8 @@
 #include "Torus.h"
 
 
+void aux_drawTorus(double smallrad,double bigrad,int smallsubdivs,int bigsubdivs,int tanloc);
+
 Torus::Torus(){
 
 }
@@ -24,28 +26,51 @@ void Torus::setLoops(int loop){this->loops = loop;}
 
 void Torus::draw(){
 
-	glutSolidTorus(this->innerRadius, this->outerRadius, this->slices, this->loops);
+	this->getTexture()->apply();
+	aux_drawTorus(this->innerRadius, this->outerRadius, this->slices, this->loops, -1);
 
 }
 
+void aux_drawTorus(double smallrad,double bigrad,int smallsubdivs,int bigsubdivs,int tanloc)
+{
+    const double pi = 3.1415926535898;
+    for (int i1 = 0; i1 < bigsubdivs; ++i1)
+    {
+        double t1a = double(i1)/bigsubdivs;
+        double a1a = t1a * 2.0*pi;
+        double t1b = double(i1+1)/bigsubdivs;
+        double a1b = t1b * 2.0*pi;
+        glBegin(GL_QUAD_STRIP);
+        for (int i2 = 0; i2 <= smallsubdivs; ++i2)
+        {
+            double t2 = double(i2)/smallsubdivs;
+            double a2 = t2 * 2.0*pi;
 
-int Torus::addValues(string attr, string val){
+            double nax = cosl(a2)*cosl(a1a);
+            double nay = cosl(a2)*sinl(a1a);
+            double naz = sinl(a2);
+            double pax = (bigrad + smallrad * cosl(a2))*cosl(a1a);
+            double pay = (bigrad + smallrad * cosl(a2))*sinl(a1a);
+            double paz = smallrad * sinl(a2);
+            glNormal3d(nax, nay, naz);
+          /*  if (tanloc != -1)
+                glVertexAttrib3dARB(tanloc, -sin(a1a), cos(a1a), 0.);*/
+            glTexCoord2d(t1a, t2);
+            glVertex3d(pax, pay, paz);
 
-	if(attr == "inner"){
-		setInnerRadius(atof(val.c_str()));
-	}else{
-		if(attr == "outer"){
-			setOuterRadius(atof(val.c_str()));
-		}else{
-			if(attr == "slices"){
-				setSlices(atoi(val.c_str()));
-			}else{
-				if(attr == "loops"){
-					setLoops(atoi(val.c_str()));
-					return 1;
-				}
-			}
-		}
-	}
-	return 0;
+            double nbx = cosl(a2)*cosl(a1b);
+            double nby = cosl(a2)*sinl(a1b);
+            double nbz = sinl(a2);
+            double pbx = (bigrad + smallrad * cosl(a2))*cosl(a1b);
+            double pby = (bigrad + smallrad * cosl(a2))*sinl(a1b);
+            double pbz = smallrad * sinl(a2);
+            glNormal3d(nbx, nby, nbz);
+            /*if (tanloc != -1)
+                glVertexAttrib3dARB(tanloc, -sin(a1b), cos(a1b), 0.);*/
+            glTexCoord2d(t1b, t2);
+            glVertex3d(pbx, pby, pbz);
+        }
+        glEnd();
+    }
 }
+
