@@ -86,6 +86,7 @@ Board::Board()
 
 void Board::draw()
 {
+
     torus_sensors->draw();
 
     for (int i = 0; i < pieces.size(); i++)

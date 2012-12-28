@@ -98,11 +98,13 @@ void GameScene::display()
 
     /** Draw objects */
     glPushMatrix();
-    glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
-    torus->draw();
-    glColor3f(1.0, 1.0, 1.0);
+		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
+		torus->draw();
+		glutSolidTorus(TORUS_INNER_RADIUS, TORUS_OUTER_RADIUS-TORUS_INNER_RADIUS,50,50);
+		glColor3f(1.0, 1.0, 1.0);
     glPopMatrix();
 
+	//torus->draw();
     //p->draw();
     glutSwapBuffers();
 }

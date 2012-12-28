@@ -6,6 +6,6 @@
 #define TORUS_INNER_RADIUS 1.5
 #define PI 3.14159265
 
-#define SCALING_FACTOR 2
+#define SCALING_FACTOR 4
 
 #endif

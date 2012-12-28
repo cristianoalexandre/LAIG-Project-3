@@ -90,9 +90,9 @@ void Piece::draw()
 {
     glPushMatrix();
     glRotated(this->rotationAngle_ZZ, 0, 0, 1);
-    glTranslated(0, TORUS_OUTER_RADIUS * SCALING_FACTOR + 0.75, 0);
+	glTranslated(0, TORUS_OUTER_RADIUS-TORUS_INNER_RADIUS, 0);
     glRotated(this->rotationAngle_XX, 1, 0, 0);
-    glTranslated(0, TORUS_INNER_RADIUS * SCALING_FACTOR + 0.75, 0);
+	glTranslated(0, TORUS_INNER_RADIUS, 0);
 
     //glRotated(this->rotationAngle_ZZ,0,0,1);
     //glTranslated(TORUS_OUTER_RADIUS, this->getPos_y(), this->getPos_z());
@@ -101,10 +101,8 @@ void Piece::draw()
     glTranslated(0, 0.5, 0);
     glutSolidCube(1);
      */
-    glPushMatrix();
-    glScalef(20,20,20);
+    
     model->draw();
-    glPopMatrix();
 
     glPopMatrix();
 }
