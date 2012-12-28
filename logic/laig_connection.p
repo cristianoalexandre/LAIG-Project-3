@@ -48,14 +48,17 @@ parse_input(select(BoardStr,Piece,Cell),Answer) :-
     
 parse_input(play(BoardStr,CellOri,CellDest,PlayerColor,human), Answer) :-
     make_play(BoardStr,CellOri,CellDest,PlayerColor,Answer).
+	
+pase_input(play(BoardStr,PlayerColor,cpu(N)), Answer) :-
+	make_cpu_play(BoardStr,PlayerColor,N,Answer).
 
-parse_input(check(BoardStr,PlayerColor),Answer) :-
+parse_input(search_check(BoardStr,PlayerColor),Answer) :-
     make_check_verification(BoardStr,PlayerColor,Answer).
     
-parse_input(draw(BoardStr),Answer) :-
+parse_input(search_draw(BoardStr),Answer) :-
     make_draw_verification(BoardStr,Answer).
     
-parse_input(checkmate(BoardStr,PlayerColor),Answer) :-
+parse_input(search_checkmate(BoardStr,PlayerColor),Answer) :-
     make_check_mate_verification(BoardStr,PlayerColor,Answer).
 
 parse_input(close,bye).
@@ -103,3 +106,9 @@ make_play(BoardStr,CellOri,CellDest,PlayerColor,Answer) :-
     string_to_board(BoardStr,Board),
     move_piece(game(PlayerColor,Board),game(_,NewBoard),CellOri,CellDest),
     board_to_string(NewBoard,Answer).
+
+make_cpu_play(BoardStr,PlayerColor,N,Answer) :-
+	string_to_board(BoardStr,Board),
+	best_move(game(PlayerColor,Board), N, From, To),
+	move_piece(game(PlayerColor,Board),game(_,NewBoard),From,To),
+	board_to_string(NewBoard,Answer).

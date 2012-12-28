@@ -17,9 +17,7 @@
 #include "Triangle.h"
 #include "Sphere.h"
 
-#include "Piece.h"
-#include "Model.h"
-#include "Board.h"
+#include "Game.h"
 
 #include <math.h>
 #include <vector>
@@ -29,35 +27,41 @@ static vector<PolyLineAnimation*> allPolyAnimations;
 class GameScene : public CGFscene
 {
 public:
-    void init();
-    void display();
-    void update(long t);
-    void drawModel_box();
-    ~GameScene();
+	void init();
+	void initCGFLights();
+	void display();
+	void update(long t);
+	void drawModel_box();
+	~GameScene();
 
 private:
-    static const long update_time = 30;
+	static const long update_time = 30;
 
-    /** Lights declaration */
-    CGFlight * light0;
-    CGFlight * light1;
-    CGFlight * light2;
-    CGFlight * light3;
+	/** Lights declaration */
+	CGFlight * light0;
+	CGFlight * light1;
+	CGFlight * light2;
+	CGFlight * light3;
+	CGFlight * light4;
+	CGFlight * light5;
+	CGFlight * light6;
+	CGFlight * light7;
 
-    GLuint cena;
+	/** Appearances declaration */
+	CGFappearance* materialAppearance;
+	CGFappearance* textureAppearance;
+	CGFappearance* tentAppearance;
 
-    /** Appearances declaration */
-    CGFappearance* materialAppearance;
-    CGFappearance* textureAppearance;
-    CGFappearance* tentAppearance;
+	/** Primitives declaration */
+	Piece* p;
+	Board* torus;
 
-    /** Primitives declaration */
-    Piece* p;
-    Board* torus;
+	/** Shaders declaration */
+	DemoShader * shader1;
+	//Model * model1;
 
-    /** Shaders declaration */
-    DemoShader * shader1;
-    Model * model1;
+	/** Game declaration */
+	Game * game;
 };
 
 #endif	/* GAMESCENE_H */

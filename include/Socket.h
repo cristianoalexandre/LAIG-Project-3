@@ -14,15 +14,6 @@
 #include <strings.h>
 
 #endif
-#ifdef _WIN32
-#include <WinSock2.h>
-#include <windows.h>
-
-#define perror(s) \
-		fprintf(stderr,"\n%s %d\n", s, WSAGetLastError())
-
-#pragma comment( lib, "wsock32.lib" )
-#endif
 
 #include <string>
 #include <iostream>
@@ -43,13 +34,7 @@ class Socket
 private:
 	string address;
 	unsigned int port;
-#ifdef __linux__
 	unsigned int socketDescriptor;
-#elif defined _WIN32
-	SOCKET socketDescriptor;
-#endif
-	struct sockaddr_in server;
-	struct hostent *hp;
 
 public:
 	Socket();

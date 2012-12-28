@@ -7,9 +7,11 @@
 #include <cstdlib>
 #include <vector>
 
+#include "Socket.h"
 #include "Play.h"
 #include "AuxiliaryFunctions.h"
 #include "Board.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -25,12 +27,20 @@ class Game
 private:
 	stack <Play*> executedPlays;
 	int lastMessageType;
+	Player *player1;
+	Player *player2;
+	Player *currentPlayer;
+	Socket *socket;
+
 public:
-	Game() ;
+	Game();
+	Game(Player * player1, Player * player2);
 	~Game();
 
 	void viewReplay();
 	void makePlay(Play* newPlay);
+	void changePlayer();
+
 	void parseMsg(string msg);
 
 	bool parseReadyMsg(string msg);

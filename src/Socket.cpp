@@ -1,6 +1,16 @@
 #include "Socket.h"
 #ifdef _WIN32
+
+#define _WINSOCKAPI_    // stops windows.h including winsock.h
+#include <winsock2.h>
 #include <ws2tcpip.h>
+#include <Windows.h>
+
+#define perror(s) \
+		fprintf(stderr,"\n%s %d\n", s, WSAGetLastError())
+
+#pragma comment( lib, "wsock32.lib" )
+
 #endif
 
 Socket::Socket()
@@ -14,6 +24,9 @@ Socket::Socket(string address, unsigned int port)
 
 void Socket::open(string address, unsigned int port)
 {
+	struct sockaddr_in server;
+	struct hostent *hp;
+
 #ifdef __linux__
 	socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
 #elif defined _WIN32
