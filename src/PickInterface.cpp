@@ -103,3 +103,102 @@ void PickInterface::setScene(GameScene* s){
 
 	this->game_scene = s;
 }
+
+void PickInterface::processKeyboard(unsigned char key, int x, int y)
+{
+	// Uncomment below if you would like to process the default keys (e.g. 's' for snapshot, 'Esc' for exiting, ...)
+	CGFinterface::processKeyboard(key, x, y);
+}
+
+void PickInterface::initGUI()
+{
+	// Check CGFinterface.h and GLUI documentation for the types of controls available
+	varPanel = addPanel("Options", 1);
+
+	addButtonToPanel(varPanel, "Undo", 2);
+	addButtonToPanel(varPanel,"Replay",3);
+	addColumnToPanel(varPanel);
+
+	GLUI_Panel* textureChoice = addPanelToPanel(varPanel,"Choose Textures",1);
+	GLUI_RadioGroup* textures = addRadioGroupToPanel(textureChoice,0,4);
+
+	addRadioButtonToGroup(textures,"Wood");
+	addRadioButtonToGroup(textures,"Glass");
+	addRadioButtonToGroup(textures,"Metal");
+	addColumnToPanel(varPanel);
+
+	GLUI_Panel* difficulty = addPanelToPanel(varPanel,"Dificuldade",1);
+	GLUI_RadioGroup* levels = addRadioGroupToPanel(difficulty,0,5);
+
+	addRadioButtonToGroup(levels,"Begginer");
+	addRadioButtonToGroup(levels,"Experienced");
+	addRadioButtonToGroup(levels,"Hardcore Geek");
+
+
+
+}
+
+void PickInterface::processGUI(GLUI_Control *ctrl)
+{
+	switch (ctrl->user_id)
+	{
+		case 1:
+		{			
+			break;
+		};
+		case 2:
+		{		
+			cout << "pressed undo button" << endl;
+			break;
+		};
+		case 3:
+		{
+			cout << "pressed replay button" << endl;
+			break;
+		};
+		case 4:
+		{	
+			switch(ctrl->get_int_val())
+			{
+			case 0:
+				{
+					cout << "wood" << endl;
+					break;
+				};
+			case 1:
+				{
+					cout << "glass" << endl;
+					break;
+				};
+			case 2:
+				{
+					cout << "metal" << endl;
+					break;
+				};
+			}
+			break;
+		};
+		case 5:
+		{
+			switch(ctrl->get_int_val())
+			{
+			case 0:
+				{
+					cout << "Begginer" << endl;
+					break;
+				};
+			case 1:
+				{
+					cout << "Experienced" << endl;
+					break;
+				};
+			case 2:
+				{
+					cout << "Hardcore Geek" << endl;
+					break;
+				};
+			}
+			break;
+		};
+	};
+}
