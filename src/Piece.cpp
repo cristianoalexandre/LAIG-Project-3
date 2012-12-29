@@ -5,6 +5,9 @@ Piece::Piece()
     this->currentCell_ID = 0;
     this->type = "undefined";
     this->color = "undefined";
+	bounce = NULL;
+	frameCounter = 0;
+	selected = false;
     initModel();
 }
 
@@ -13,6 +16,9 @@ Piece::Piece(string type, string color)
     this->currentCell_ID = 0;
     this->type = type;
     this->color = color;
+	bounce = new DemoShader("../shaders/bounce.vert","../shaders/dummyFrag.frag");
+	frameCounter = 0;
+	selected = false;
     initModel();
 }
 
@@ -89,6 +95,12 @@ void Piece::initModel()
 
     cout << "Loading model at " << fileString << endl;
     model = new Model(fileString);
+
+	if(color == "white"){
+		bounce->setBaseTexture("../textures/ivory.jpg");
+	}else{
+		bounce->setBaseTexture("../textures/black.jpg");
+	}
 }
 
 int Piece::getCurrentCell()
@@ -145,6 +157,16 @@ void Piece::moveToCell(int cellID)
     setCurrentCellID(cellID);
 }
 
+bool Piece::getSelected(){
+
+	return selected;
+}
+
+void Piece::setSelected(bool sel){
+
+	this->selected = sel;
+}
+
 void Piece::draw()
 {
     glPushMatrix();
@@ -161,7 +183,21 @@ void Piece::draw()
     glutSolidCube(1);
      */
 
-    model->draw();
+	if(selected){
+		glPushMatrix();
+			frameCounter++;
+			bounce->bind();
+			bounce->update(frameCounter);
+			model->draw();
+			bounce->unbind();
+		glPopMatrix();
+	}else{
+		frameCounter = 0;
+		bounce->bind();
+		bounce->update(frameCounter);
+		model->draw();
+		bounce->unbind();
+	}
 
     glPopMatrix();
 }

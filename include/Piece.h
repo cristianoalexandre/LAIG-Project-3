@@ -7,6 +7,7 @@
 #include "Model.h"
 #include <string>
 #include "stringcase.hpp"
+#include "DemoShader.h"
 
 using namespace std;
 
@@ -21,6 +22,10 @@ private:
     double rotationAngle_ZZ;
 
     Model * model;
+	DemoShader* bounce;
+
+	bool selected;
+	int frameCounter;
 
 public:
     Piece();
@@ -39,6 +44,8 @@ public:
 
     void initModel();
 
+	bool getSelected();
+	void setSelected(bool sel);
     void set_XX_Angle(double ang);
     void set_ZZ_Angle(double ang);
     void setCurrentCellID(int i);
