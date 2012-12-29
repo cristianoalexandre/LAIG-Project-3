@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <sstream>
 
 #include "Socket.h"
 #include "Play.h"
@@ -21,6 +22,7 @@ using namespace std;
 #define CHECK 3
 #define CHECKMATE 4
 #define DRAW 5
+#define NONE 6
 
 class Game
 {
@@ -31,6 +33,7 @@ private:
 	Player *player2;
 	Player *currentPlayer;
 	Socket *socket;
+        Board *board;
 
 public:
 	Game();
@@ -45,10 +48,21 @@ public:
 
 	bool parseReadyMsg(string msg);
 	vector <Cell*> parseSelectMsg(string msg);
-	Board* parsePlayMsg(string msg);
+	bool parsePlayMsg(string msg);
 	bool parseCheckMsg(string msg);
 	bool parseCheckMateMsg(string msg);
 	bool parseDrawMsg(string msg);
+        
+        void sendCheckMsg();
+        void sendCheckMateMsg();
+        void sendDrawMsg();
+        void sendSelectMsg(Cell &srcCell);
+        
+        void playCycle();
+        
+        
+        
+        void draw();
 };
 
 #endif	/* GAME_H */

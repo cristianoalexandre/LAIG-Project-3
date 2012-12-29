@@ -5,12 +5,13 @@
 
 #include "DemoShader.h"
 
-DemoShader::DemoShader(){
+DemoShader::DemoShader()
+{
 }
 
 DemoShader::DemoShader(char* vert, char* frag)
 {
-	
+
     init(vert, frag);
     //init("../shaders/textureDemo2.vert", "../shaders/textureDemo2.frag");
 
@@ -22,8 +23,8 @@ DemoShader::DemoShader(char* vert, char* frag)
 
     // Store Id for the uniform "normScale", new value will be stored on bind()
     scaleLoc = glGetUniformLocation(id(), "normScale");
-	/*baseTexture = new CGFtexture("../textures/LAIG-heightmap.jpg");
-    secTexture = new CGFtexture("../textures/LAIG-text.jpg");*/
+    /*baseTexture = new CGFtexture("../textures/LAIG-heightmap.jpg");
+secTexture = new CGFtexture("../textures/LAIG-text.jpg");*/
 
     // get the uniform location for the sampler
     baseImageLoc = glGetUniformLocation(id(), "firstImage");
@@ -56,17 +57,18 @@ void DemoShader::bind(void)
     baseTexture->apply();
 
     // do the same for other textures
-   /* glActiveTexture(GL_TEXTURE1);
+    /* glActiveTexture(GL_TEXTURE1);
 
-    secTexture->apply();*/
+     secTexture->apply();*/
 
     glActiveTexture(GL_TEXTURE0);
 
 }
 
-void DemoShader::setBaseTexture(char* path){
+void DemoShader::setBaseTexture(char* path)
+{
 
-	baseTexture = new CGFtexture(path);
+    baseTexture = new CGFtexture(path);
 }
 
 DemoShader::~DemoShader(void)

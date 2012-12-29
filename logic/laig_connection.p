@@ -104,11 +104,16 @@ make_select(BoardStr,Piece,Cell,Answer) :-
 
 make_play(BoardStr,CellOri,CellDest,PlayerColor,Answer) :-
     string_to_board(BoardStr,Board),
-    move_piece(game(PlayerColor,Board),game(_,NewBoard),CellOri,CellDest),
-    board_to_string(NewBoard,Answer).
+    move_piece(game(PlayerColor,Board),game(_,NewBoard),CellOri,CellDest) ->
+        board_to_string(NewBoard,Answer)
+    ;
+        Answer = no.
 
 make_cpu_play(BoardStr,PlayerColor,N,Answer) :-
 	string_to_board(BoardStr,Board),
 	best_move(game(PlayerColor,Board), N, From, To),
-	move_piece(game(PlayerColor,Board),game(_,NewBoard),From,To),
-	board_to_string(NewBoard,Answer).
+%	move_piece(game(PlayerColor,Board),game(_,NewBoard),From,To),
+    term_to_atom(From,FromStr),
+    term_to_atom(To,ToStr),
+    string_concat(FromStr,',',Tmp),
+    string_concat(Tmp,ToStr,Answer).

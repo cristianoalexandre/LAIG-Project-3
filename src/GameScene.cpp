@@ -48,7 +48,11 @@ void GameScene::init()
 	animP->setMovement(32, 1, 1);
 	
 	/** Game declaration */
-	game = new Game();
+        
+        player1 = new Player("white");
+        player2 = new Player("black",CPU_EASY);
+        
+	game = new Game(player1, player2);
 
 	/** Animation initialization */
 	//PieceAnimation::setMiliSecs(10);
@@ -92,6 +96,7 @@ void GameScene::display()
 	glCullFace(GL_BACK);
 
 	/** Draw objects */
+        game->draw();
 	/**glPushMatrix();
 		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
 		//torus->draw();
@@ -119,6 +124,7 @@ GameScene::~GameScene()
 	delete light5;
 	delete light6;
 	delete light7;
+        delete game;
 }
 
 void GameScene::initCGFLights()

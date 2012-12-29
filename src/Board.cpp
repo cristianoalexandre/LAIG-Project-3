@@ -84,12 +84,17 @@ Board::Board()
     this->torus_sensors = new TorusHitbox();
 }
 
+Board::Board(string boardStr)
+{
+    // not implemented - is it really necessary?
+}
+
 void Board::draw()
 {
-
     torus_sensors->draw();
 
-    for (int i = 0; i < pieces.size(); i++)
+    
+    for (unsigned int i = 0; i < pieces.size(); i++)
     {
         pieces.at(i)->draw();
     }
@@ -100,7 +105,7 @@ void Board::setCellContent(int lin, int col, Piece* piece)
     board[abs(lin - 7)][col] = piece;
 
     if (piece != NULL)
-        piece->setCell(lin, col);
+        piece->setCellID(lin, col);
 }
 
 Piece * Board::findPiece(Piece& pieceToFind)
@@ -117,10 +122,10 @@ Piece * Board::findPiece(Piece& pieceToFind)
 string Board::toString()
 {
     string toReturn = "";
-    
+
     for (int i = 0; i < 8; i++)
         for (int k = 0; k < 8; i++)
         {
-            toReturn += board[i][k]->toString();
+            toReturn += board[i][k]->toShortString();
         }
 }

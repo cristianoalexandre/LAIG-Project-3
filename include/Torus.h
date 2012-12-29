@@ -1,6 +1,8 @@
 #ifndef TORUS_H
 #define TORUS_H
 
+#include <math.h>
+
 #include "Object.h"
 
 class Torus: public Object

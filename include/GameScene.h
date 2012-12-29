@@ -58,9 +58,10 @@ private:
 
 	/** Shaders declaration */
 	DemoShader * shader1;
-	//Model * model1;
 
 	/** Game declaration */
+        Player * player1;
+        Player * player2;
 	Game * game;
 };
 

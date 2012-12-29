@@ -2,6 +2,7 @@
 #define	PLAYER_H
 
 #include <string>
+#include <sstream>
 
 #define HUMAN 0
 #define CPU_EASY 1
@@ -13,14 +14,16 @@ using namespace std;
 class Player
 {
 private:
-	string name;
 	string color; /* black or white */
 	int type;
 public:
 	Player();
-	Player(string name, string color);
+	Player(string color);
+        Player(string color, int type);
 	string getName();
 	string getColor();
+        
+        string toString();
 };
 
 #endif	/* PLAYER_H */

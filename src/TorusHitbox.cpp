@@ -5,7 +5,6 @@
 
 TorusHitbox::TorusHitbox()
 {
-
     ring1 = new Ring();
     ring1->attributeCellIDs();
     ring2 = new Ring();

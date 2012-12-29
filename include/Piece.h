@@ -6,6 +6,7 @@
 #include "magicNumbers.h"
 #include "Model.h"
 #include <string>
+#include <sstream>
 #include "stringcase.hpp"
 #include "DemoShader.h"
 
@@ -22,15 +23,15 @@ private:
     double rotationAngle_ZZ;
 
     Model * model;
-	DemoShader* bounce;
+    DemoShader* bounce;
 
-	bool selected;
-	int frameCounter;
+    bool selected;
+    int frameCounter;
 
 public:
     Piece();
     Piece(string type, string color);
-    Piece(const char encoding);
+    Piece(const char shortEncoding);
     ~Piece();
 
     string getType();
@@ -44,14 +45,15 @@ public:
 
     void initModel();
 
-	bool getSelected();
-	void setSelected(bool sel);
+    bool getSelected();
+    void setSelected(bool sel);
     void set_XX_Angle(double ang);
     void set_ZZ_Angle(double ang);
     void setCurrentCellID(int i);
     void moveToCell(int cellID);
-    void setCell(int lin, int col);
-    string toString();
+    void setCellID(int lin, int col);
+    string toShortString();
+    string toLongString();
 
     void draw();
 

@@ -5,9 +5,9 @@ Piece::Piece()
     this->currentCell_ID = 0;
     this->type = "undefined";
     this->color = "undefined";
-	bounce = NULL;
-	frameCounter = 0;
-	selected = false;
+    bounce = NULL;
+    frameCounter = 0;
+    selected = false;
     initModel();
 }
 
@@ -16,9 +16,9 @@ Piece::Piece(string type, string color)
     this->currentCell_ID = 0;
     this->type = type;
     this->color = color;
-	bounce = new DemoShader("../shaders/bounce.vert","../shaders/dummyFrag.frag");
-	frameCounter = 0;
-	selected = false;
+    bounce = new DemoShader("../shaders/bounce.vert", "../shaders/dummyFrag.frag");
+    frameCounter = 0;
+    selected = false;
     initModel();
 }
 
@@ -96,11 +96,14 @@ void Piece::initModel()
     cout << "Loading model at " << fileString << endl;
     model = new Model(fileString);
 
-	if(color == "white"){
-		bounce->setBaseTexture("../textures/ivory.jpg");
-	}else{
-		bounce->setBaseTexture("../textures/black.jpg");
-	}
+    if (color == "white")
+    {
+        bounce->setBaseTexture("../textures/ivory.jpg");
+    }
+    else
+    {
+        bounce->setBaseTexture("../textures/black.jpg");
+    }
 }
 
 int Piece::getCurrentCell()
@@ -157,14 +160,16 @@ void Piece::moveToCell(int cellID)
     setCurrentCellID(cellID);
 }
 
-bool Piece::getSelected(){
+bool Piece::getSelected()
+{
 
-	return selected;
+    return selected;
 }
 
-void Piece::setSelected(bool sel){
+void Piece::setSelected(bool sel)
+{
 
-	this->selected = sel;
+    this->selected = sel;
 }
 
 void Piece::draw()
@@ -183,21 +188,24 @@ void Piece::draw()
     glutSolidCube(1);
      */
 
-	if(selected){
-		glPushMatrix();
-			frameCounter++;
-			bounce->bind();
-			bounce->update(frameCounter);
-			model->draw();
-			bounce->unbind();
-		glPopMatrix();
-	}else{
-		frameCounter = 0;
-		bounce->bind();
-		bounce->update(frameCounter);
-		model->draw();
-		bounce->unbind();
-	}
+    if (selected)
+    {
+        glPushMatrix();
+        frameCounter++;
+        bounce->bind();
+        bounce->update(frameCounter);
+        model->draw();
+        bounce->unbind();
+        glPopMatrix();
+    }
+    else
+    {
+        frameCounter = 0;
+        bounce->bind();
+        bounce->update(frameCounter);
+        model->draw();
+        bounce->unbind();
+    }
 
     glPopMatrix();
 }
@@ -245,7 +253,7 @@ int Piece::getCurrentCol()
     return col - 1;
 }
 
-void Piece::setCell(int lin, int col)
+void Piece::setCellID(int lin, int col)
 {
     currentCell_ID = col + 1;
     currentCell_ID *= 10;
@@ -262,7 +270,7 @@ void Piece::setCell(int lin, int col)
     moveToCell(currentCell_ID);
 }
 
-string Piece::toString()
+string Piece::toShortString()
 {
     if (color == "black")
     {
@@ -309,4 +317,12 @@ string Piece::toString()
         cerr << "Problem in Piece::toString - unknown color";
         exit(-1);
     }
+}
+
+string Piece::toLongString()
+{
+    ostringstream sout;
+
+    sout << "piece(" << color << "," << type << ")";
+    return sout.str();
 }

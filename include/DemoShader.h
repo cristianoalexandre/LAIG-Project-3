@@ -10,7 +10,9 @@ public:
     DemoShader();
     virtual void bind(void);
     ~DemoShader(void);
+    DemoShader(char* vert, char* frag);
     void setScale(float s);
+    void setBaseTexture(char* path);
     float normScale;
     int wireframe;
 
