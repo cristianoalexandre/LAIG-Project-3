@@ -128,4 +128,6 @@ string Board::toString()
         {
             toReturn += board[i][k]->toShortString();
         }
+
+	return toReturn;
 }
