@@ -32,8 +32,8 @@ void Model::loadOBJ(string filename)
 void Model::draw()
 {
 	glPushMatrix();
-		glScalef(12,12,12);
-		glTranslated(0,this->height/2,0);
-		glmDraw(model, GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
+		glScalef(4,4,4);
+		glTranslated(0,this->height,0);
+		glmDraw(model, GLM_SMOOTH | GLM_MATERIAL);
 	glPopMatrix();
 }
