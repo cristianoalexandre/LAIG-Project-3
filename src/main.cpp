@@ -4,6 +4,7 @@
 #include "TPscene.h"
 #include "DemoScene.h"
 
+#include "GameApplication.h"
 #include "CGFapplication.h"
 #include "GameScene.h"
 #include "PickInterface.h"
@@ -13,30 +14,32 @@ using std::exception;
 
 int main(int argc, char* argv[])
 {
-	CGFapplication app = CGFapplication();
+	GameApplication gameApp = GameApplication();
+
 	GameScene* s = new GameScene();
 	PickInterface* pick = new PickInterface();
 	pick->setScene(s);
 
-	try
-	{
-		app.init(&argc, argv);
+    try
+    {
+        gameApp.init(&argc, argv);
 
-		app.setScene(s);
-		app.setInterface(pick);
 
-		app.run();
-	}
-	catch (GLexception& ex)
-	{
-		cout << "Erro: " << ex.what();
-		return -1;
-	}
-	catch (exception& ex)
-	{
-		cout << "Erro inesperado: " << ex.what();
-		return -1;
-	}
+        gameApp.setScene(s);
+        gameApp.setInterface(pick);
 
-	return 0;
+        gameApp.run();
+    }
+    catch (GLexception& ex)
+    {
+        cout << "Erro: " << ex.what();
+        return -1;
+    }
+    catch (exception& ex)
+    {
+        cout << "Erro inesperado: " << ex.what();
+        return -1;
+    }
+
+    return 0;
 }
