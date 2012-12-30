@@ -57,7 +57,7 @@ public:
 	string toLongString();
 	void die();
 	void live();
-        bool isDead();
+    bool isDead();
 
 	void draw();
 

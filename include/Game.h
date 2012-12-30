@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "Kill.h"
 #include "Move.h"
+#include "PieceAnimation.h"
 
 using namespace std;
 
@@ -63,6 +64,8 @@ public:
     int firstPickedCell;
     int secondPickedCell;
     vector <Cell*> possiblePlays;
+
+	PieceAnimation* anim;
 
     Game();
     Game(Player * player1, Player * player2);

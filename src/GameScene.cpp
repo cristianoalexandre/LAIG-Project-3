@@ -9,6 +9,7 @@ unsigned int PieceAnimation::mili_secs = 0;
 
 int Ring::numberExistingRings = 0;
 
+
 PieceAnimation* animP;
 
 void updateTransforms(int dummy)
@@ -33,19 +34,29 @@ void GameScene::init()
     glNormal3f(0, 0, 1);
 
     /** Materials initialization */
-    materialAppearance = new CGFappearance();
+   	float mat1_shininess = 100.0; 
+	float mat1_specular[] = {0.3, 0.3, 0.3, 1.0};	/* specular reflection. */
+	float mat1_diffuse[] =  {0.7, 0.7, 0.7, 1.0};	/* diffuse reflection. */
+	float mat1_ambient[] =  {0.7, 0.7, 0.7, 1.0};	/* ambient reflection. */
+
+	materialAppearance = new CGFappearance(mat1_ambient, mat1_diffuse, mat1_specular, mat1_shininess);
     textureAppearance = new CGFappearance("../textures/pyramid.jpg", GL_REPEAT, GL_REPEAT);
     tentAppearance = new CGFappearance("../textures/tent.jpg", GL_REPEAT, GL_REPEAT);
+	chess1Appearance = new CGFappearance("../textures/chess1.jpg", GL_REPEAT, GL_REPEAT);
+	chess2Appearance = new CGFappearance("../textures/chess2.jpg", GL_REPEAT, GL_REPEAT);
+	chess3Appearance = new CGFappearance("../textures/chess3.jpg", GL_REPEAT, GL_REPEAT);
+	
 
     /** Object initialization */
     /*torus = new Board();
     p = new Piece("rook", "white");
     p->moveToCell(20);
     //model1 = new Model("../models/whitePawn.obj");
+	*/
 
     animP = new PieceAnimation();
-    animP->setPiece(p);
-    animP->setMovement(32, 1, 1);
+   /* animP->setPiece(p);
+    animP->setMovement(32, 1, 1);*
 	
     /** Game declaration */
 
@@ -58,6 +69,9 @@ void GameScene::init()
     game->socket->sendMsg("ready.\n");
     cout << "Ready? - " << game->socket->readMsg();
     game->reloadSocket();
+
+	graphical_torus = new Torus(TORUS_INNER_RADIUS, TORUS_OUTER_RADIUS-TORUS_INNER_RADIUS,50,50);
+	graphical_torus->setTexture(chess1Appearance);
 
     /** Animation initialization */
     PieceAnimation::setMiliSecs(10);
@@ -102,13 +116,23 @@ void GameScene::display()
     glCullFace(GL_BACK);
 
     /** Draw objects */
-    game->draw();
+	materialAppearance->apply();
+	glPushMatrix();
+		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
+		graphical_torus->draw();
+		game->draw();
+	glPopMatrix();
 
     glutSwapBuffers();
 }
 
 void GameScene::update(long t)
 {
+	if(game->anim != NULL){
+		game->anim->update();
+		
+	}
+
     switch (game->status)
     {
     case PICKING_1:
@@ -124,7 +148,7 @@ void GameScene::update(long t)
         break;
     case SENDING_SELECT:
     {
-        Piece * pieceInSelectedCell = game->board->findPieceInCell(game->firstPickedCell);
+        pieceInSelectedCell = game->board->findPieceInCell(game->firstPickedCell);
         if (pieceInSelectedCell == NULL)
         {
             game->status = PICKING_1;
@@ -137,6 +161,7 @@ void GameScene::update(long t)
         {
             game->sendSelectMsg(pieceInSelectedCell);
             game->status = WAITING_SELECT;
+			pieceInSelectedCell->setSelected(true);
         }
         break;
     }
@@ -166,6 +191,7 @@ void GameScene::update(long t)
                 game->status = PICKING_1;
                 game->firstPickedCell = -1;
                 selectedCellID = -1;
+				pieceInSelectedCell->setSelected(false);
                 break;
             }
             cout << selectedCellID << endl;
@@ -203,10 +229,12 @@ void GameScene::update(long t)
                 break;
             }
         }
-        if (game->status == SENDING_DRAW)
+        if (game->status == SENDING_DRAW){
+			pieceInSelectedCell->setSelected(false);
+			animP->setPiece(pieceInSelectedCell);
+			animP->setMovement(game->secondPickedCell,1,1);
             break;
-        else
-        {
+		}else{
             cerr << "Invalid play...";
             game->status = PICKING_2;
             break;
@@ -390,35 +418,121 @@ GameScene::~GameScene()
 
 void GameScene::initCGFLights()
 {
-    float light0_pos[4] = {-10.0, 12.0, -10.0, 1.0};
-    light0 = new CGFlight(GL_LIGHT0, light0_pos);
-    light0->enable();
+    /* Light positions */
+	float light0_pos[4] = {0.0, 0.0, 0.0, 1.0};
+	float light1_pos[4] = {0.0, 18.0, 0.0, 1.0};
+	float light2_pos[4] = {-12.0, 12.0, -12.0, 1.0};
+	float light3_pos[4] = {-12.0, 12.0, 12.0, 1.0};
+	float light4_pos[4] = {12.0, -12.0, 12.0, 1.0};
+	float light5_pos[4] = {12.0, -12.0, -12.0, 1.0};
+	float light6_pos[4] = {-12.0, -12.0, -12.0, 1.0};
+	float light7_pos[4] = {-12.0, -12.0, 12.0, 1.0};
 
-    float light1_pos[4] = {10.0, -12.0, -10.0, 1.0};
-    light1 = new CGFlight(GL_LIGHT1, light1_pos);
-    light1->enable();
+	/* light values - same for every light */
+	float ambient[] =   {2.0, 2.0, 2.0, 1.0}; // sem componente ambiente
+	float diffuse[] =   {6.0, 6.0, 6.0, 1.0};
+	float specular[] =  {6.0, 6.0, 6.0, 1.0};
+	float kc = 0.0;
+	float kl = 1.0;
+	float kq = 0.0;
+	GLfloat dir[3] = {-1.0,0.0,-1.0};
 
-    float light2_pos[4] = {-10.0, 12.0, 10.0, 1.0};
-    light2 = new CGFlight(GL_LIGHT2, light2_pos);
-    light2->enable();
+	light0 = new CGFlight(GL_LIGHT0, light0_pos);
+	light0->setAmbient(ambient);
+	light0->setDiffuse(diffuse);
+	light0->setSpecular(specular);
+	light0->setKc(kc);
+	light0->setKl(kl);
+	light0->setKq(kq);
+	light0->enable();
 
-    float light3_pos[4] = {10.0, -12.0, 10.0, 1.0};
-    light3 = new CGFlight(GL_LIGHT3, light3_pos);
-    light3->enable();
+	light1 = new CGFlight(GL_LIGHT1, light1_pos);
+	light1->setAmbient(ambient);
+	light1->setDiffuse(diffuse);
+	light1->setSpecular(specular);
+	light1->setKc(kc);
+	light1->setKl(kl);
+	light1->setKq(kq);
+	light1->enable();
 
-    float light4_pos[4] = {-10.0, -12.0, -10.0, 1.0};
-    light4 = new CGFlight(GL_LIGHT4, light4_pos);
-    light4->enable();
+	light2 = new CGFlight(GL_LIGHT2, light2_pos);
+	light2->setAmbient(ambient);
+	light2->setDiffuse(diffuse);
+	light2->setSpecular(specular);
+	light2->setKc(kc);
+	light2->setKl(kl);
+	light2->setKq(kq);
+	light2->enable();
 
-    float light5_pos[4] = {-10.0, -12.0, 10.0, 1.0};
-    light5 = new CGFlight(GL_LIGHT5, light5_pos);
-    light5->enable();
+	light3 = new CGFlight(GL_LIGHT3, light3_pos);
+	light3->setAmbient(ambient);
+	light3->setDiffuse(diffuse);
+	light3->setSpecular(specular);
+	light3->setKc(kc);
+	light3->setKl(kl);
+	light3->setKq(kq);
+	light3->enable();
 
-    float light6_pos[4] = {10.0, 12.0, -10.0, 1.0};
-    light6 = new CGFlight(GL_LIGHT6, light6_pos);
-    light6->enable();
+	light4 = new CGFlight(GL_LIGHT4, light4_pos);
+	light4->setAmbient(ambient);
+	light4->setDiffuse(diffuse);
+	light4->setSpecular(specular);
+	light4->setKc(kc);
+	light4->setKl(kl);
+	light4->setKq(kq);
+	light4->enable();
 
-    float light7_pos[4] = {10.0, 12.0, 10.0, 1.0};
-    light7 = new CGFlight(GL_LIGHT7, light7_pos);
-    light7->enable();
+	light5 = new CGFlight(GL_LIGHT5, light5_pos);
+	light5->setAmbient(ambient);
+	light5->setDiffuse(diffuse);
+	light5->setSpecular(specular);
+	light5->setKc(kc);
+	light5->setKl(kl);
+	light5->setKq(kq);
+	light5->enable();
+
+	light6 = new CGFlight(GL_LIGHT6, light6_pos);
+	light6->setAmbient(ambient);
+	light6->setDiffuse(diffuse);
+	light6->setSpecular(specular);
+	light6->setKc(kc);
+	light6->setKl(kl);
+	light6->setKq(kq);
+	light6->enable();
+
+	light7 = new CGFlight(GL_LIGHT7, light7_pos);
+	light7->setAmbient(ambient);
+	light7->setDiffuse(diffuse);
+	light7->setSpecular(specular);
+	light7->setKc(kc);
+	light7->setKl(kl);
+	light7->setKq(kq);
+	light7->enable();
+}
+
+void GameScene::activateTexture(int i){
+
+
+	switch(i)
+	{
+	case 0:
+		{
+			graphical_torus->setTexture(chess1Appearance);
+			//illumination->setBaseTexture("../textures/chess1.jpg");
+			break;
+		}
+	case 1:
+		{
+			graphical_torus->setTexture(chess2Appearance);
+			//illumination->setBaseTexture("../textures/chess2.jpg");
+			break;
+		}
+	case 2:
+		{
+			graphical_torus->setTexture(chess3Appearance);
+
+			//illumination->setBaseTexture("../textures/chess3.jpg");
+			break;
+		}
+	}
 }

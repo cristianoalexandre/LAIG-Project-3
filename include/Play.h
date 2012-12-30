@@ -28,6 +28,8 @@ public:
 	unsigned int getSrcCellCol();
 	unsigned int getDestCellRow();
 	unsigned int getDestCellCol();
+
+	Cell* getDestCell();
 	Piece* getPiece();
 
 	virtual string toString();

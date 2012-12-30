@@ -16,6 +16,7 @@
 #include "Cylinder.h"
 #include "Triangle.h"
 #include "Sphere.h"
+#include "Torus.h"
 
 #include "Game.h"
 
@@ -32,12 +33,14 @@ public:
 	void display();
 	void update(long t);
 	void drawModel_box();
+	void activateTexture(int i);
 	~GameScene();
 
 	/** Control variables declaration */
 	int selectedCellID;
 
 private:
+	Piece * pieceInSelectedCell;
 	static const long update_time = 30;
 
 	/** Lights declaration */
@@ -54,10 +57,14 @@ private:
 	CGFappearance* materialAppearance;
 	CGFappearance* textureAppearance;
 	CGFappearance* tentAppearance;
+	CGFappearance* chess1Appearance;
+	CGFappearance* chess2Appearance;
+	CGFappearance* chess3Appearance;
 
 	/** Primitives declaration */
 	Piece* p;
 	Board* torus;
+	Torus* graphical_torus;
 
 	/** Shaders declaration */
 	DemoShader * shader1;
@@ -66,6 +73,7 @@ private:
 	Player * player1;
 	Player * player2;
 	Game * game;
+
 };
 
 #endif	/* GAMESCENE_H */
