@@ -51,46 +51,46 @@ using namespace std;
 
 class Game
 {
-
 public:
-	stack <Play*> executedPlays;
-	int lastMessageType;
-	Player *player1;
-	Player *player2;
-	Player *currentPlayer;
-	Socket *socket;
-	Board *board;
-	int status;
-	int firstPickedCell;
-	int secondPickedCell;
-	vector <Cell*> possiblePlays;
+    stack <Play*> executedPlays;
+    int lastMessageType;
+    Player *player1;
+    Player *player2;
+    Player *currentPlayer;
+    Socket *socket;
+    Board *board;
+    int status;
+    int firstPickedCell;
+    int secondPickedCell;
+    vector <Cell*> possiblePlays;
 
-	Game();
-	Game(Player * player1, Player * player2);
-	~Game();
+    Game();
+    Game(Player * player1, Player * player2);
+    ~Game();
 
-	void viewReplay();
-	void makePlay(Play* newPlay);
-	void changePlayer();
+    void viewReplay();
+    void makePlay(Play* newPlay);
+    void changePlayer();
 
-	void parseMsg(string msg);
+    void parseMsg(string msg);
 
-	bool parseReadyMsg(string msg);
-	vector <Cell*> parseSelectMsg(string msg);
-	bool parsePlayMsg(string msg);
-	bool parseCheckMsg(string msg);
-	bool parseCheckMateMsg(string msg);
-	bool parseDrawMsg(string msg);
-		
-	void sendCheckMsg();
-	void sendCheckMateMsg();
-	void sendDrawMsg();
-	void sendSelectMsg(Piece *piece);
-		
-	void disconnectSocket();
-	void connectSocket();
-	void reloadSocket();
-	void draw();
+    bool parseReadyMsg(string msg);
+    vector <Cell*> parseSelectMsg(string msg);
+    bool parsePlayMsg(string msg);
+    bool parseCheckMsg(string msg);
+    bool parseCheckMateMsg(string msg);
+    bool parseDrawMsg(string msg);
+
+    void sendCheckMsg();
+    void sendCheckMateMsg();
+    void sendDrawMsg();
+    void sendSelectMsg(Piece *piece);
+
+    void disconnectSocket();
+    void connectSocket();
+    void reloadSocket();
+    void draw();
+    void undo();
 };
 
 #endif	/* GAME_H */

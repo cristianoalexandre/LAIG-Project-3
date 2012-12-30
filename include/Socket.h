@@ -4,6 +4,9 @@
 #ifdef __linux__
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/fcntl.h>
+#include <sys/file.h>
+#include <features.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <cstdio>

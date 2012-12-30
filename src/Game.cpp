@@ -31,6 +31,47 @@ Game::~Game()
 
 void Game::viewReplay()
 {
+    stack <Play*> executedPlaysCpy = executedPlays;
+    queue <Play*> replayPlays;
+    
+    while (executedPlaysCpy.empty() == false)
+    {
+        replayPlays.push(executedPlaysCpy.top());
+        executedPlaysCpy.pop();
+    }
+    
+    while (executedPlays.empty() == false)
+    {
+        undo();
+    }
+    
+    while (replayPlays.empty() == false)
+    {
+        makePlay(replayPlays.front());
+        replayPlays.pop();
+    }
+}
+
+void Game::undo()
+{
+    /* Primeiro desfazemos o movimento... */
+    Play * play = executedPlays.top();
+    executedPlays.pop();
+    
+    Piece * currentPiece = play->getPiece();
+    currentPiece->setCellID(play->getSrcCellRow(),play->getSrcCellCol());
+    
+    /* E só depois as mortes. */
+    
+    while (executedPlays.empty() == false && executedPlays.top()->type() == KILL)
+    {
+        play = executedPlays.top();
+        currentPiece = play->getPiece();
+        currentPiece->live();
+        currentPiece->setCellID(play->getDestCellRow(),play->getDestCellCol());
+        
+        executedPlays.pop();
+    }
 }
 
 void Game::makePlay(Play* newPlay)
