@@ -32,6 +32,7 @@ using namespace std;
 #define SENDING_SELECT 2
 #define WAITING_SELECT 3
 #define PICKING_2 4
+#define CPU_PLAYING 40
 #define PLAYING 5
 #define SENDING_DRAW 6
 #define WAITING_DRAW 7
@@ -44,6 +45,8 @@ using namespace std;
 #define WAITING_CHECKMATE_1 13
 #define SENDING_CHECK_1 14
 #define WAITING_CHECK_1 15
+#define SEND_CPU_MSG 30
+#define WAITING_CPU_ANS 31
 
 /* GAME OVER */
 #define GAME_DRAW 16
@@ -64,6 +67,7 @@ public:
     int firstPickedCell;
     int secondPickedCell;
     vector <Cell*> possiblePlays;
+	vector <Cell*> cpuPlay;
 
 	PieceAnimation* anim;
 
@@ -79,7 +83,7 @@ public:
 
     bool parseReadyMsg(string msg);
     vector <Cell*> parseSelectMsg(string msg);
-    bool parsePlayMsg(string msg);
+    vector <Cell*> parseCPUPlayMsg(string msg);
     bool parseCheckMsg(string msg);
     bool parseCheckMateMsg(string msg);
     bool parseDrawMsg(string msg);
@@ -87,7 +91,8 @@ public:
     void sendCheckMsg();
     void sendCheckMateMsg();
     void sendDrawMsg();
-    void sendSelectMsg(Piece *piece);
+	void sendSelectMsg(Piece *piece);
+	void sendCPUPlayMsg();
 
     void disconnectSocket();
     void connectSocket();

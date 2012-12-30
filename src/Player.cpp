@@ -31,7 +31,12 @@ string Player::toString()
     if (type == HUMAN)
         sout << "human";
     else
-        sout << "cpu(" << type << ")";
+        sout <<  type ;
     
     return sout.str();
+}
+
+int Player::getType()
+{
+	return type;
 }

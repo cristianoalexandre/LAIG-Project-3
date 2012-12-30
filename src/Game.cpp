@@ -33,47 +33,47 @@ Game::~Game()
 
 void Game::viewReplay()
 {
-    stack <Play*> executedPlaysCpy = executedPlays;
-    queue <Play*> replayPlays;
-    
-    while (executedPlaysCpy.empty() == false)
-    {
-        replayPlays.push(executedPlaysCpy.top());
-        executedPlaysCpy.pop();
-    }
-    
-    while (executedPlays.empty() == false)
-    {
-        undo();
-    }
-    
-    while (replayPlays.empty() == false)
-    {
-        makePlay(replayPlays.front());
-        replayPlays.pop();
-    }
+	stack <Play*> executedPlaysCpy = executedPlays;
+	queue <Play*> replayPlays;
+	
+	while (executedPlaysCpy.empty() == false)
+	{
+		replayPlays.push(executedPlaysCpy.top());
+		executedPlaysCpy.pop();
+	}
+	
+	while (executedPlays.empty() == false)
+	{
+		undo();
+	}
+	
+	while (replayPlays.empty() == false)
+	{
+		makePlay(replayPlays.front());
+		replayPlays.pop();
+	}
 }
 
 void Game::undo()
 {
-    /* Primeiro desfazemos o movimento... */
-    Play * play = executedPlays.top();
-    executedPlays.pop();
-    
-    Piece * currentPiece = play->getPiece();
-    currentPiece->setCellID(play->getSrcCellRow(),play->getSrcCellCol());
-    
-    /* E só depois as mortes. */
-    
-    while (executedPlays.empty() == false && executedPlays.top()->type() == KILL)
-    {
-        play = executedPlays.top();
-        currentPiece = play->getPiece();
-        currentPiece->live();
-        currentPiece->setCellID(play->getDestCellRow(),play->getDestCellCol());
-        
-        executedPlays.pop();
-    }
+	/* Primeiro desfazemos o movimento... */
+	Play * play = executedPlays.top();
+	executedPlays.pop();
+	
+	Piece * currentPiece = play->getPiece();
+	currentPiece->setCellID(play->getSrcCellRow(),play->getSrcCellCol());
+	
+	/* E só depois as mortes. */
+	
+	while (executedPlays.empty() == false && executedPlays.top()->type() == KILL)
+	{
+		play = executedPlays.top();
+		currentPiece = play->getPiece();
+		currentPiece->live();
+		currentPiece->setCellID(play->getDestCellRow(),play->getDestCellCol());
+		
+		executedPlays.pop();
+	}
 }
 
 void Game::makePlay(Play* newPlay)
@@ -104,34 +104,6 @@ void Game::makePlay(Play* newPlay)
 	}
 }
 
-void Game::parseMsg(string msg)
-{
-	switch (lastMessageType)
-	{
-	case READY:
-		parseReadyMsg(msg);
-		break;
-	case SELECT:
-		parseSelectMsg(msg);
-		break;
-	case PLAY:
-		parsePlayMsg(msg);
-		break;
-	case CHECK:
-		parseCheckMsg(msg);
-		break;
-	case CHECKMATE:
-		parseCheckMateMsg(msg);
-		break;
-	case DRAW:
-		parseDrawMsg(msg);
-		break;
-	default:
-		cerr << "Unknown message type - Aborting." << endl;
-		exit(-1);
-	}
-}
-
 bool Game::parseCheckMsg(string msg)
 {
 	lastMessageType = NONE;
@@ -156,18 +128,13 @@ bool Game::parseReadyMsg(string msg)
 	return (msg == "yes");
 }
 
-bool Game::parsePlayMsg(string msg)
-{
-	return true;
-}
-
 vector <Cell*> Game::parseSelectMsg(string msg)
 {
 	vector <string> cellsStr = stringExplode(msg, ".");
 
 	vector <Cell*> cells;
 
-	for (int i = 0; i < cellsStr.size(); i++)
+	for (int i = 0; i < cellsStr.size()-1; i++)
 	{
 		cout << cellsStr[i] << endl;
 		cells.push_back(new Cell(cellsStr[i]));
@@ -203,6 +170,33 @@ void Game::sendSelectMsg(Piece *piece)
 	cout << msg.str() << endl;
 	socket->sendMsg(msg.str());
 	lastMessageType = SELECT;
+}
+
+void Game::sendCPUPlayMsg()
+{
+	ostringstream msg;
+
+	msg << "cpu_play(" << board->toString() << "," << currentPlayer->toString() << ").\n";
+
+	cout << msg.str() << endl;
+	socket->sendMsg(msg.str());
+}
+
+vector <Cell*> Game::parseCPUPlayMsg(string msg)
+{
+	cout << msg << endl;
+
+	vector <string> cellsStr = stringExplode(msg, ".");
+
+	vector <Cell*> cells;
+
+	for (int i = 0; i < cellsStr.size(); i++)
+	{
+		cout << cellsStr[i] << endl;
+		cells.push_back(new Cell(cellsStr[i]));
+	}
+
+	return cells;
 }
 
 void Game::sendCheckMsg()

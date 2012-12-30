@@ -41,11 +41,8 @@ parse_input(ready,yes).
 
 parse_input(select(BoardStr,Piece,Cell),Answer) :-
     make_select(BoardStr,Piece,Cell,Answer).
-    
-parse_input(play(BoardStr,CellOri,CellDest,PlayerColor,human), Answer) :-
-    make_play(BoardStr,CellOri,CellDest,PlayerColor,Answer).
 	
-pase_input(play(BoardStr,PlayerColor,cpu(N)), Answer) :-
+parse_input(cpu_play(BoardStr,PlayerColor,N), Answer) :-
 	make_cpu_play(BoardStr,PlayerColor,N,Answer).
 
 parse_input(search_check(BoardStr,PlayerColor),Answer) :-
@@ -108,8 +105,7 @@ make_play(BoardStr,CellOri,CellDest,PlayerColor,Answer) :-
 make_cpu_play(BoardStr,PlayerColor,N,Answer) :-
 	string_to_board(BoardStr,Board),
 	best_move(game(PlayerColor,Board), N, From, To),
-%	move_piece(game(PlayerColor,Board),game(_,NewBoard),From,To),
     term_to_atom(From,FromStr),
     term_to_atom(To,ToStr),
-    string_concat(FromStr,',',Tmp),
+    string_concat(FromStr,'.',Tmp),
     string_concat(Tmp,ToStr,Answer).

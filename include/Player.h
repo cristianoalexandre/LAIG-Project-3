@@ -23,7 +23,8 @@ public:
 	
 	string getName();
 	string getColor();
-		
+	int getType();	
+
 	string toString();
 };
 

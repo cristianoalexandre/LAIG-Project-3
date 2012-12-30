@@ -136,7 +136,12 @@ void GameScene::update(long t)
     switch (game->status)
     {
     case PICKING_1:
-        cout << game->currentPlayer->getColor() << " turn to play." << endl;
+		if(game->currentPlayer->getType() != HUMAN)
+		{
+			game->status = SEND_CPU_MSG;
+			break;
+		}
+
         if (selectedCellID >= 0)
         {
             cout << selectedCellID << endl;
@@ -183,6 +188,30 @@ void GameScene::update(long t)
             break;
         }
     }
+	case SEND_CPU_MSG:
+	{
+		game->sendCPUPlayMsg();
+		game->status = WAITING_CPU_ANS;
+		break;
+	}
+	case WAITING_CPU_ANS:
+	{
+		string msg = "";
+        msg = game->socket->readMsg();
+
+		if (msg == "")
+        {
+            game->status = WAITING_CPU_ANS;
+            break;
+        }
+        else
+        {
+			game->cpuPlay = game->parseCPUPlayMsg(msg);
+            game->status = CPU_PLAYING;
+            game->reloadSocket();
+            break;
+        }
+	}
     case PICKING_2:
         if (selectedCellID >= 0)
         {
@@ -201,6 +230,28 @@ void GameScene::update(long t)
             selectedCellID = -1;
         }
         break;
+	case CPU_PLAYING:
+	{
+		/* Vamos mover a peça de sítio! */
+		vector <int> firstPickedCellConverted = idToLinCol(game->cpuPlay[0]->getID());
+		vector <int> secondPickedCellConverted = idToLinCol(game->cpuPlay[1]->getID());
+
+		cout << "Creating a move..." << endl;
+		Move * movingPlay = new Move(firstPickedCellConverted[0], firstPickedCellConverted[1], secondPickedCellConverted[0], secondPickedCellConverted[1], game->board->findPieceInCell(firstPickedCellConverted[0], firstPickedCellConverted[1]));
+
+		/* Se existirem peças na célula -> finish them! */
+		Piece * pieceToKill = game->board->findPieceInCell(game->cpuPlay[1]->getID());
+        if (pieceToKill != NULL)
+        {
+			cout << "Creating a Kill... -> Gonna kill " << pieceToKill->toLongString() << endl;
+            Kill * killingPlay = new Kill(firstPickedCellConverted[0], firstPickedCellConverted[1], secondPickedCellConverted[0], secondPickedCellConverted[1], game->board->findPieceInCell(secondPickedCellConverted[0], secondPickedCellConverted[1]));
+            game->makePlay(killingPlay);
+        }
+
+        game->makePlay(movingPlay);
+
+
+	}
     case PLAYING:
     {
         for (int i = 0; i < game->possiblePlays.size(); i++)
@@ -231,8 +282,6 @@ void GameScene::update(long t)
         }
         if (game->status == SENDING_DRAW){
 			pieceInSelectedCell->setSelected(false);
-			animP->setPiece(pieceInSelectedCell);
-			animP->setMovement(game->secondPickedCell,1,1);
             break;
 		}else{
             cerr << "Invalid play...";
