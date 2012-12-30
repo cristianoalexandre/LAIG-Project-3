@@ -90,7 +90,9 @@ void Game::makePlay(Play* newPlay)
 
 		anim = new PieceAnimation();
 		anim->setPiece(currentPiece);
-		anim->setMovement(newPlay->getDestCell()->getID(),1,1);//ATENCAO a direccao, ainda se tem que calcular isso....
+		anim->setEndCell(newPlay->getDestCell()->getID());
+		anim->setMovement(1,1);//ATENCAO a direccao, ainda se tem que calcular isso....
+
 		//currentPiece->setCellID(newPlay->getDestCellRow(),newPlay->getDestCellCol());
 		cout << "Finished moving." << endl;
 	}

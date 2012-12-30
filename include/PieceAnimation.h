@@ -4,40 +4,46 @@
 
 #include "Piece.h"
 #include <iostream>
-#include <math.h>
 
 using namespace std;
 
+
 class PieceAnimation
 {
+
 private:
-    Piece* piece;
+	Piece* piece;
+	
+	int initialCell;
+	int endCell;
 
-    int initialCell;
-    int endCell;
+	double ZZ_angularIncrement;
+	double XX_angularIncrement;
 
-    double ZZ_angularIncrement;
-    double XX_angularIncrement;
+	double total_angle_XX;
+	double total_angle_ZZ;
 
-    double XX_final;
-    double ZZ_final;
+	double XX_final;
+	double ZZ_final;
+	
+	double totalAnimationTime;
 
-    double totalAnimationTime;
-
-    static unsigned int mili_secs;
+	static unsigned int mili_secs;
 
 public:
+	
+	PieceAnimation();
 
-    PieceAnimation();
+	void setPiece(Piece* p);
+	void setEndCell(int end);
+	void setTotalAnimationTime(double time);
+	void setMovement(int outDir, int inDir);
 
-    void setPiece(Piece* p);
-    void setMovement(int end, int outDir, int inDir);
 
+	void update();
 
-    void update();
-
-    static void setMiliSecs(unsigned int mSecs);
-    static unsigned int getMiliSecs();
+	static void setMiliSecs(unsigned int mSecs);
+	static unsigned int getMiliSecs();
 };
 
 
