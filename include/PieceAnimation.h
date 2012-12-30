@@ -39,6 +39,7 @@ public:
 	void setTotalAnimationTime(double time);
 	void setMovement(int outDir, int inDir);
 
+	bool isAnimating();
 
 	void update();
 

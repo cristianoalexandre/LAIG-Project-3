@@ -87,8 +87,9 @@ void Game::makePlay(Play* newPlay)
 	{
 		cout << "Moving to " << newPlay->getDestCellRow() << "," << newPlay->getDestCellCol() << endl;
 
-
 		anim = new PieceAnimation();
+		cout << "Animating ";
+		cout << currentPiece->toLongString() << endl;
 		anim->setPiece(currentPiece);
 		anim->setEndCell(newPlay->getDestCell()->getID());
 		anim->setMovement(1,1);//ATENCAO a direccao, ainda se tem que calcular isso....
@@ -134,10 +135,15 @@ vector <Cell*> Game::parseSelectMsg(string msg)
 
 	vector <Cell*> cells;
 
-	for (int i = 0; i < cellsStr.size()-1; i++)
+	for (int i = 0; i < cellsStr.size(); i++)
 	{
-		cout << cellsStr[i] << endl;
-		cells.push_back(new Cell(cellsStr[i]));
+		Cell * newCell = new Cell(cellsStr[i]);
+
+		if (board->findPieceInCell(newCell->getID()) == NULL ||
+			board->findPieceInCell(newCell->getID())->getColor() != currentPlayer->getColor())
+		{
+			cells.push_back(newCell);
+		}
 	}
 
 	return cells;
@@ -146,9 +152,15 @@ vector <Cell*> Game::parseSelectMsg(string msg)
 void Game::changePlayer()
 {
 	if (currentPlayer == player1)
+	{
+		cout << "Changing to player2..." << endl;
 		currentPlayer = player2;
+	}
 	else
+	{
+		cout << "Changing to player1..." << endl;
 		currentPlayer = player1;
+	}
 }
 
 void Game::draw()
@@ -192,7 +204,6 @@ vector <Cell*> Game::parseCPUPlayMsg(string msg)
 
 	for (int i = 0; i < cellsStr.size(); i++)
 	{
-		cout << cellsStr[i] << endl;
 		cells.push_back(new Cell(cellsStr[i]));
 	}
 

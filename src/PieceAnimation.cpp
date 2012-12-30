@@ -26,6 +26,11 @@ void PieceAnimation::setTotalAnimationTime(double time){
 	this->totalAnimationTime = time;
 }
 
+bool PieceAnimation::isAnimating()
+{
+	return (ZZ_angularIncrement != 0 || XX_angularIncrement !=0);
+}
+
 void PieceAnimation::setMovement(int outerDir, int innerDir){//dir = 0 -> move down; dir = 1 -> move up
 
 	cout << "piece_xx_angle = " << this->piece->get_XX_Angle() << endl;

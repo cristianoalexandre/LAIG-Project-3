@@ -47,6 +47,7 @@ using namespace std;
 #define WAITING_CHECK_1 15
 #define SEND_CPU_MSG 30
 #define WAITING_CPU_ANS 31
+#define ANIMATING 41
 
 /* GAME OVER */
 #define GAME_DRAW 16
