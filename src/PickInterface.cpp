@@ -92,7 +92,10 @@ void PickInterface::processHits (GLint hits, GLuint buffer[])
 		// possibly invoking a method on the scene class and passing "selected" and "nselected"
 		printf("Picked ID's: ");
 		for (int i=0; i<nselected; i++)
+		{
 			printf("%d ",selected[i]);
+			game_scene->selectedCellID = selected[i];
+		}
 		printf("\n");
 	}
 	else

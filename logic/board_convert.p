@@ -89,7 +89,7 @@ list_codes([Atom], Codes) :- atom_codes(Atom, Codes).
 
 list_codes([Atom|ListTail], Codes) :-
     atom_codes(Atom, AtomCodes),
-    append(AtomCodes, ",", AtomCodesWithComma),
+    append(AtomCodes, ".", AtomCodesWithComma),
     append(AtomCodesWithComma, ListTailCodes, Codes),
     list_codes(ListTail, ListTailCodes).
 

@@ -22,7 +22,7 @@ Socket::Socket(string address, unsigned int port)
 	open(address, port);
 }
 
-void Socket::open(string address, unsigned int port)
+void Socket::open(string address, unsigned int port, bool nonblock)
 {
 	struct sockaddr_in server;
 	struct hostent *hp;
@@ -53,7 +53,6 @@ void Socket::open(string address, unsigned int port)
 #elif defined _WIN32
 	if (connect(socketDescriptor, (struct sockaddr *)&server, sizeof server) == SOCKET_ERROR)
 	{
-		//perror("");
 		cerr << "Problem while connecting to the socket. Please make sure the Prolog game server is running.";
 		cin.get();
 		exit(-1);
@@ -66,14 +65,24 @@ void Socket::sendMsg(string msg)
 	send(socketDescriptor, msg.c_str(), msg.length() + 1, 0);
 }
 
-string Socket::readMsg(bool nonblock)
+string Socket::readMsg()
 {
 	char msg[MAX_MSG_LENGTH];
 	memset(msg,0,MAX_MSG_LENGTH*sizeof(char));
 
-	recv(socketDescriptor, msg, MAX_MSG_LENGTH, 0);
-
-	return string(msg);
+	if (recv(socketDescriptor, msg, MAX_MSG_LENGTH, 0) < 0)
+	{
+		cout << "Answer not ready!" << endl;
+		return "";
+	}
+	else
+	{
+		cout << msg << endl;
+		if (msg == "\n")
+			return "";
+		else
+			return string(msg);
+	}
 }
 
 void Socket::disconnect()
@@ -82,5 +91,19 @@ void Socket::disconnect()
 	close(socketDescriptor);
 #elif defined _WIN32
 	closesocket(socketDescriptor);
+#endif
+}
+
+int setNonBlocking(unsigned int fd)
+{
+#ifdef __linux__
+	int flags;
+
+	if (-1 == (flags = fcntl(fd, F_GETFL, 0)))
+		flags = 0;
+	return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+#else
+	u_long iMode=1;
+	return ioctlsocket(fd,FIONBIO,&iMode);
 #endif
 }

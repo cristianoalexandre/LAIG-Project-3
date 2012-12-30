@@ -13,21 +13,23 @@ typedef Piece* piecePtr;
 class Board
 {
 private:
-    string boardState;
-    vector <piecePtr> pieces;
-    TorusHitbox* torus_sensors;
+	string boardState;
+	vector <piecePtr> pieces;
+	TorusHitbox* torus_sensors;
 
-    piecePtr board [8][8];
+	piecePtr board [8][8];
 
 public:
-    Board();
-    Board(string boardStr);
+	Board();
+	Board(string boardStr);
 
-    void draw();
-    Piece * findPiece(Piece &pieceToFind);
-    void setCellContent(int lin, int col, Piece * piece);
+	void draw();
+	Piece * findPiece(Piece &pieceToFind);
+	Piece * findPieceInCell(int id);
+	Piece * findPieceInCell(int lin, int col);
+	void setCellContent(int lin, int col, Piece * piece);
 
-    string toString();
+	string toString();
 };
 
 #endif	/* BOARD_H */

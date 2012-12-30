@@ -2,24 +2,31 @@
 
 Game::Game()
 {
-    player1 = NULL;
-    player2 = NULL;
-    board = NULL;
-    socket = NULL;
+	player1 = NULL;
+	player2 = NULL;
+	board = NULL;
+	socket = NULL;
+	status = PICKING_1;
+	firstPickedCell = -1;
+	secondPickedCell = -1;
 }
 
 Game::Game(Player * player1, Player * player2)
 {
-    this->player1 = player1;
-    this->player2 = player2;
-    board = new Board();
-    socket = new Socket("localhost", 60001);
+	this->player1 = player1;
+	this->player2 = player2;
+	board = new Board();
+	socket = new Socket("localhost", 60010);
+	status = PICKING_1;
+	firstPickedCell = -1;
+	secondPickedCell = -1;
+	currentPlayer = player1;
 }
 
 Game::~Game()
 {
-    delete board;
-    delete socket;
+	delete board;
+	delete socket;
 }
 
 void Game::viewReplay()
@@ -28,132 +35,168 @@ void Game::viewReplay()
 
 void Game::makePlay(Play* newPlay)
 {
+	executedPlays.push(newPlay);
 
+	Piece * currentPiece = newPlay->getPiece();
+
+	if (newPlay->type() == MOVE)
+	{
+		cout << "Moving to " << newPlay->getDestCellRow() << "," << newPlay->getDestCellCol() << endl;
+
+		currentPiece->setCellID(newPlay->getDestCellRow(),newPlay->getDestCellCol());
+		cout << "Finished moving." << endl;
+	}
+	else if (newPlay->type() == KILL)
+	{
+		cout << "Killing..." << endl;
+		currentPiece->die();
+		cout << "Killing completed." << endl;
+	}
 }
 
 void Game::parseMsg(string msg)
 {
-    switch (lastMessageType)
-    {
-    case READY:
-        parseReadyMsg(msg);
-        break;
-    case SELECT:
-        parseSelectMsg(msg);
-        break;
-    case PLAY:
-        parsePlayMsg(msg);
-        break;
-    case CHECK:
-        parseCheckMsg(msg);
-        break;
-    case CHECKMATE:
-        parseCheckMateMsg(msg);
-        break;
-    case DRAW:
-        parseDrawMsg(msg);
-        break;
-    default:
-        cerr << "Unknown message type - Aborting." << endl;
-        exit(-1);
-    }
+	switch (lastMessageType)
+	{
+	case READY:
+		parseReadyMsg(msg);
+		break;
+	case SELECT:
+		parseSelectMsg(msg);
+		break;
+	case PLAY:
+		parsePlayMsg(msg);
+		break;
+	case CHECK:
+		parseCheckMsg(msg);
+		break;
+	case CHECKMATE:
+		parseCheckMateMsg(msg);
+		break;
+	case DRAW:
+		parseDrawMsg(msg);
+		break;
+	default:
+		cerr << "Unknown message type - Aborting." << endl;
+		exit(-1);
+	}
 }
 
 bool Game::parseCheckMsg(string msg)
 {
-    lastMessageType = NONE;
-    return (msg == "yes");
+	lastMessageType = NONE;
+	return (msg == "yes");
 }
 
 bool Game::parseCheckMateMsg(string msg)
 {
-    lastMessageType = NONE;
-    return (msg == "yes");
+	lastMessageType = NONE;
+	return (msg == "yes");
 }
 
 bool Game::parseDrawMsg(string msg)
 {
-    lastMessageType = NONE;
-    return (msg == "yes");
+	lastMessageType = NONE;
+	return (msg == "yes");
 }
 
 bool Game::parseReadyMsg(string msg)
 {
-    lastMessageType = NONE;
-    return (msg == "yes");
+	lastMessageType = NONE;
+	return (msg == "yes");
 }
 
 bool Game::parsePlayMsg(string msg)
 {
-    return true;
+	return true;
 }
 
 vector <Cell*> Game::parseSelectMsg(string msg)
 {
-    vector <string> cellsStr = stringExplode(msg, ",");
+	vector <string> cellsStr = stringExplode(msg, ".");
 
-    vector <Cell*> cells;
+	vector <Cell*> cells;
 
-    for (vector <string>::iterator it = cellsStr.begin(); it != cellsStr.end(); it++)
-    {
-        cells.push_back(new Cell(*it));
-    }
+	for (int i = 0; i < cellsStr.size(); i++)
+	{
+		cout << cellsStr[i] << endl;
+		cells.push_back(new Cell(cellsStr[i]));
+	}
 
-    return cells;
+	return cells;
 }
 
 void Game::changePlayer()
 {
-    if (currentPlayer == player1)
-        currentPlayer = player2;
-    else
-        currentPlayer = player1;
+	if (currentPlayer == player1)
+		currentPlayer = player2;
+	else
+		currentPlayer = player1;
 }
 
 void Game::draw()
 {
-    board->draw();
+	board->draw();
 }
 
-void Game::sendSelectMsg(Cell& srcCell)
+void Game::sendSelectMsg(Piece *piece)
 {
-    ostringstream msg;
+	ostringstream msg;
 
-    msg << "select(" << board->toString() << "," <<
-            srcCell.getPiece()->toLongString() << "," << srcCell.toString() << ".\n";
+	Cell newCell;
+	newCell.setID(piece->getCurrentCell());
+	cout << piece->getCurrentCell() << endl;
 
-    socket->sendMsg(msg.str());
-    lastMessageType = SELECT;
+	msg << "select(" << board->toString() << "," <<
+		piece->toLongString() << "," << newCell.toString() << ").\n";
+
+	cout << msg.str() << endl;
+	socket->sendMsg(msg.str());
+	lastMessageType = SELECT;
 }
 
 void Game::sendCheckMsg()
 {
-    ostringstream msg;
+	ostringstream msg;
 
-    msg << "search_check(" << board->toString() << "," << currentPlayer->getColor() << ".\n";
+	msg << "search_check(" << board->toString() << "," << currentPlayer->getColor() << ").\n";
 
-    socket->sendMsg(msg.str());
-    lastMessageType = CHECK;
+	socket->sendMsg(msg.str());
+	lastMessageType = CHECK;
 }
 
 void Game::sendCheckMateMsg()
 {
-    ostringstream msg;
+	ostringstream msg;
 
-    msg << "search_checkmate(" << board->toString() << "," << currentPlayer->getColor() << ".\n";
-
-    socket->sendMsg(msg.str());
-    lastMessageType = CHECKMATE;
+	msg << "search_checkmate(" << board->toString() << "," << currentPlayer->getColor() << ").\n";
+	
+	cout << msg.str() << endl;
+	socket->sendMsg(msg.str());
+	lastMessageType = CHECKMATE;
 }
 
 void Game::sendDrawMsg()
 {
-    ostringstream msg;
+	ostringstream msg;
 
-    msg << "search_draw(" << board->toString() << ".\n";
+	msg << "search_draw(" << board->toString() << ").\n";
+
+	socket->sendMsg(msg.str());
+	lastMessageType = DRAW;
+}
+void Game::disconnectSocket()
+{
+	socket->disconnect();
 }
 
-void Game::playCycle()
+void Game::connectSocket()
 {
-    
+	socket->open("localhost", 60010);
+}
+
+void Game::reloadSocket()
+{
+	disconnectSocket();
+	connectSocket();
 }

@@ -1,7 +1,7 @@
 :- use_module(library(socket)).
 
 /** Open Prolog in server mode */
-server_port(60001).
+server_port(60010).
 
 create_server(Port) :-
         tcp_socket(Socket),
@@ -12,25 +12,21 @@ create_server(Port) :-
 	
 /** Main Loop - Wait and answer requests */
 dispatch(AcceptFd) :-
-        tcp_accept(AcceptFd, Socket, Peer),
-        thread_create(process_client(Socket, Peer), _, [ detached(true) ]),
+        tcp_accept(AcceptFd, Socket, _),
+        thread_create(process_client(Socket), _, [ detached(true) ]),
         dispatch(AcceptFd).
 
-process_client(Socket, Peer) :-
+process_client(Socket) :-
         tcp_open_socket(Socket, In, Out),
         writeln('Connection established with new client'),
 		process_msg(In,Out).
-        %close_connection(In, Out).
 		
 process_msg(In, Out) :-
 	read(In,Msg),
-    writeln(Msg),
     parse_input(Msg, Answer),
-    writeln(Answer),
     write(Out,Answer),
     nl(Out),
     flush_output(Out),
-	writeln(Answer),
 	process_msg(In, Out).
 	
 close_connection(In, Out) :-

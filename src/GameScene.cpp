@@ -48,16 +48,22 @@ void GameScene::init()
 	animP->setMovement(32, 1, 1);
 	
 	/** Game declaration */
-        
-        player1 = new Player("white");
-        player2 = new Player("black",CPU_EASY);
-        
+
+	player1 = new Player("white");
+	player2 = new Player("black", CPU_EASY);
+
 	game = new Game(player1, player2);
+	selectedCellID = -1;
+
+	game->socket->sendMsg("ready.\n");
+	cout << "Ready? - " << game->socket->readMsg();
+	game->reloadSocket();
 
 	/** Animation initialization */
-	//PieceAnimation::setMiliSecs(10);
+	PieceAnimation::setMiliSecs(10);
 	//glutTimerFunc(PieceAnimation::getMiliSecs(), updateTransforms, 0);
-	//setUpdatePeriod(PieceAnimation::getMiliSecs());
+	cout << "Update period: " << PieceAnimation::getMiliSecs() << endl;
+	setUpdatePeriod(PieceAnimation::getMiliSecs());
 
 	/** Shaders declaration*/
 
@@ -67,13 +73,13 @@ void GameScene::display()
 {
 	/** Clear image and depth buffer everytime we update the scene */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.3,0.3,0.3,1.0);
 
 	/** Initialize Model-View matrix as identity (no transformation */
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	/** Defines the background color */
+	glClearColor(0.3, 0.3, 0.3, 1.0);
 
 	/** Apply transformations corresponding to the camera position relative to the origin */
 	CGFscene::activeCamera->applyView();
@@ -96,22 +102,273 @@ void GameScene::display()
 	glCullFace(GL_BACK);
 
 	/** Draw objects */
-        game->draw();
-	/**glPushMatrix();
-		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
-		//torus->draw();
-		glutSolidTorus(TORUS_INNER_RADIUS, TORUS_OUTER_RADIUS-TORUS_INNER_RADIUS,50,50);
-		glColor3f(1.0, 1.0, 1.0);
-	glPopMatrix();*/
+	game->draw();
 
-	//torus->draw();
-	//p->draw();
 	glutSwapBuffers();
 }
 
 void GameScene::update(long t)
 {
-	//updateTransforms(30);
+	switch (game->status)
+	{
+	case PICKING_1:
+		if (selectedCellID >= 0)
+		{
+			cout << selectedCellID << endl;
+			game->firstPickedCell = selectedCellID;
+			game->status = SENDING_SELECT;
+			cout << "First selected cell -> " << selectedCellID << endl;
+			selectedCellID = -1;
+		}
+		break;
+	case SENDING_SELECT:
+		{
+			Piece * pieceInSelectedCell = game->board->findPieceInCell(game->firstPickedCell);
+			if (pieceInSelectedCell == NULL)
+			{
+				game->status = PICKING_1;
+			}
+			else
+			{
+				game->sendSelectMsg(pieceInSelectedCell);
+				game->status = WAITING_SELECT;
+			}
+			break;
+		}
+	case WAITING_SELECT:
+	{
+		string msg = "";
+		msg = game->socket->readMsg();
+
+		if (msg == "")
+		{
+			game->status = WAITING_SELECT;
+			break;
+		}
+		else
+		{
+			game->possiblePlays = game->parseSelectMsg(msg);
+			game->status = PICKING_2;
+			game->reloadSocket();
+			break;
+		}
+	}
+	case PICKING_2:
+		if (selectedCellID >= 0)
+		{
+			if (selectedCellID == game->firstPickedCell)
+			{
+				game->status = PICKING_1;
+				game->firstPickedCell = -1;
+				selectedCellID = -1;
+				break;
+			}
+			cout << selectedCellID << endl;
+			game->secondPickedCell = selectedCellID;
+			game->status = PLAYING;
+			cout << "Second selected cell -> " << selectedCellID << endl;
+			selectedCellID = -1;
+		}
+		break;
+	case PLAYING:
+	{
+		for (int i = 0; i < game->possiblePlays.size(); i++)
+		{
+			if (game->secondPickedCell == game->possiblePlays[i]->getID())
+			{
+				/* Vamos mover a peça de sítio! */
+				vector <int> firstPickedCellConverted = idToLinCol(game->firstPickedCell);
+				vector <int> secondPickedCellConverted = idToLinCol(game->secondPickedCell);
+
+				cout << "Creating a move..." << endl;
+				Move * movingPlay = new Move(firstPickedCellConverted[0],firstPickedCellConverted[1],
+						secondPickedCellConverted[0],secondPickedCellConverted[1],
+						game->board->findPieceInCell(firstPickedCellConverted[0],firstPickedCellConverted[1]));
+				game->makePlay(movingPlay);
+
+				/* Se existirem peças na célula -> finish them! */
+				if (game->board->findPieceInCell(game->possiblePlays[i]->getID()))
+				{
+					cout << "Creating a Kill..." << endl;
+					Kill * killingPlay = new Kill(firstPickedCellConverted[0],firstPickedCellConverted[1],
+						secondPickedCellConverted[0],secondPickedCellConverted[1],
+						game->board->findPieceInCell(secondPickedCellConverted[0],secondPickedCellConverted[1]));
+					game->makePlay(movingPlay);
+				}
+
+				game->status = SENDING_DRAW;
+				break;
+			}
+		}
+
+			if (game->status == SENDING_DRAW)
+				break;
+			else
+			{
+				cerr << "Invalid play...";
+				game->status = PICKING_2;
+				break;
+			}
+		}
+	case SENDING_DRAW:
+		game->sendDrawMsg();
+		game->status=WAITING_DRAW;
+		break;
+	case WAITING_DRAW:
+	{
+		string msg = "";
+		msg = game->socket->readMsg();
+
+		if (msg == "")
+		{
+			game->status = WAITING_DRAW;
+			break;
+		}
+		else
+		{
+			if (game->parseDrawMsg(msg))
+			{
+				cout << "It's a draw. Game Over." << endl;
+				game->status = DRAW;
+			}
+			else
+			{
+				cout << "No draw, game proceeds." << endl;
+				game->status = SENDING_CHECKMATE_2;
+			}
+			game->reloadSocket();
+			break;
+		}
+	}
+	case SENDING_CHECKMATE_2:
+		game->sendCheckMateMsg();
+		game->status = WAITING_CHECKMATE_2;
+		break;
+	case WAITING_CHECKMATE_2:
+	{
+		string msg = "";
+		msg = game->socket->readMsg();
+
+		if (msg == "")
+		{
+			game->status = WAITING_CHECKMATE_2;
+			break;
+		}
+		else
+		{
+			if (game->parseDrawMsg(msg))
+			{
+				cout << titlecase(game->currentPlayer->getColor()) << " wins. Game Over." << endl;
+				if (game->currentPlayer->getColor() == "white")
+					game->status = WHITE_WIN;
+				else
+					game->status = BLACK_WIN;
+			}
+			else
+			{
+				cout << "No checkmate, game proceeds." << endl;
+				game->status = SENDING_CHECK_2;
+			}
+			game->reloadSocket();
+			break;
+		}
+	}
+	case SENDING_CHECK_2:
+		game->sendCheckMsg();
+		game->status = WAITING_CHECK_2;
+		break;
+	case WAITING_CHECK_2:
+	{
+		string msg = "";
+		msg = game->socket->readMsg();
+
+		if (msg == "")
+		{
+			game->status = WAITING_CHECK_2;
+			break;
+		}
+		else
+		{
+			if (game->parseDrawMsg(msg))
+			{
+				cout << titlecase(game->currentPlayer->getColor()) << " are in check." << endl;
+			}
+			else
+			{
+				cout << "No check, game proceeds." << endl;
+				game->status = SENDING_CHECK_2;
+			}
+			game->reloadSocket();
+			break;
+		}
+	}
+	case CHANGE_PLAYER:
+		game->changePlayer();
+		game->status = SENDING_CHECKMATE_1;
+		break;
+	case SENDING_CHECKMATE_1:
+		game->sendCheckMateMsg();
+		game->status = WAITING_CHECKMATE_1;
+		break;
+	case WAITING_CHECKMATE_1:
+	{
+		string msg = "";
+		msg = game->socket->readMsg();
+
+		if (msg == "")
+		{
+			game->status = WAITING_CHECKMATE_1;
+			break;
+		}
+		else
+		{
+			if (game->parseDrawMsg(msg))
+			{
+				cout << titlecase(game->currentPlayer->getColor()) << " wins. Game Over." << endl;
+				if (game->currentPlayer->getColor() == "white")
+					game->status = WHITE_WIN;
+				else
+					game->status = BLACK_WIN;
+			}
+			else
+			{
+				cout << "No checkmate, game proceeds." << endl;
+				game->status = SENDING_CHECK_1;
+			}
+			game->reloadSocket();
+			break;
+		}
+	}
+	case SENDING_CHECK_1:
+		game->sendCheckMsg();
+		game->status = WAITING_CHECK_1;
+		break;
+	case WAITING_CHECK_1:
+	{
+		string msg = "";
+		msg = game->socket->readMsg();
+
+		if (msg == "")
+		{
+			game->status = WAITING_CHECK_1;
+			break;
+		}
+		else
+		{
+			if (game->parseDrawMsg(msg))
+			{
+				cout << titlecase(game->currentPlayer->getColor()) << " are in check." << endl;
+			}
+			else
+			{
+				cout << "No check, game proceeds." << endl;
+				game->status = GAME_DRAW;
+			}
+			game->reloadSocket();
+			break;
+		}
+	}
+}
 }
 
 GameScene::~GameScene()
@@ -124,7 +381,7 @@ GameScene::~GameScene()
 	delete light5;
 	delete light6;
 	delete light7;
-        delete game;
+	delete game;
 }
 
 void GameScene::initCGFLights()

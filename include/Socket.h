@@ -15,8 +15,13 @@
 
 #endif
 
+#ifdef _WIN32
+
+#endif
+
 #include <string>
 #include <iostream>
+#include <cstdlib>
 #include <string.h>
 
 using namespace std;
@@ -39,11 +44,13 @@ private:
 public:
 	Socket();
 	Socket(string address, unsigned int port);
-	void open(string address, unsigned int port);
+	void open(string address, unsigned int port, bool nonblock = true);
 	void sendMsg(string msg);
-	string readMsg(bool nonblock = true);
+	string readMsg();
 	void disconnect();
 };
+
+int setNonBlocking(unsigned int fd);
 
 #endif	/* SOCKET_H */
 

@@ -7,5 +7,7 @@
 using namespace std;
 
 vector<string> stringExplode(string str, string separator);
+vector<int> idToLinCol(int id);
+int linColToId(int lin, int col);
 
 #endif /* AUX_FUNCTIONS_H */

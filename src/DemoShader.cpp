@@ -67,7 +67,6 @@ void DemoShader::bind(void)
 
 void DemoShader::setBaseTexture(char* path)
 {
-
     baseTexture = new CGFtexture(path);
 }
 

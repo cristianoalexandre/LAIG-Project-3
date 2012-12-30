@@ -34,6 +34,9 @@ public:
 	void drawModel_box();
 	~GameScene();
 
+	/** Control variables declaration */
+	int selectedCellID;
+
 private:
 	static const long update_time = 30;
 
@@ -60,8 +63,8 @@ private:
 	DemoShader * shader1;
 
 	/** Game declaration */
-        Player * player1;
-        Player * player2;
+	Player * player1;
+	Player * player2;
 	Game * game;
 };
 

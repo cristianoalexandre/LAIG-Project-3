@@ -19,11 +19,12 @@ private:
 public:
 	Player();
 	Player(string color);
-        Player(string color, int type);
+	Player(string color, int type);
+	
 	string getName();
 	string getColor();
-        
-        string toString();
+		
+	string toString();
 };
 
 #endif	/* PLAYER_H */

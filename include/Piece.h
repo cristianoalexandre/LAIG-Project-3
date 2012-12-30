@@ -15,49 +15,52 @@ using namespace std;
 class Piece : public Object
 {
 private:
-    string type;
-    string color;
-    int currentCell_ID;
+	string type;
+	string color;
+	int currentCell_ID;
+	bool dead;
 
-    double rotationAngle_XX;
-    double rotationAngle_ZZ;
+	double rotationAngle_XX;
+	double rotationAngle_ZZ;
 
-    Model * model;
-    DemoShader* bounce;
+	Model * model;
+	DemoShader* bounce;
 
-    bool selected;
-    int frameCounter;
+	bool selected;
+	int frameCounter;
 
 public:
-    Piece();
-    Piece(string type, string color);
-    Piece(const char shortEncoding);
-    ~Piece();
+	Piece();
+	Piece(string type, string color);
+	Piece(const char shortEncoding);
+	~Piece();
 
-    string getType();
-    string getColor();
-    int getCurrentCell();
-    double get_XX_Angle();
-    double get_ZZ_Angle();
+	string getType();
+	string getColor();
+	int getCurrentCell();
+	double get_XX_Angle();
+	double get_ZZ_Angle();
 
-    int getCurrentLin();
-    int getCurrentCol();
+	int getCurrentLin();
+	int getCurrentCol();
 
-    void initModel();
+	void initModel();
 
-    bool getSelected();
-    void setSelected(bool sel);
-    void set_XX_Angle(double ang);
-    void set_ZZ_Angle(double ang);
-    void setCurrentCellID(int i);
-    void moveToCell(int cellID);
-    void setCellID(int lin, int col);
-    string toShortString();
-    string toLongString();
+	bool getSelected();
+	void setSelected(bool sel);
+	void set_XX_Angle(double ang);
+	void set_ZZ_Angle(double ang);
+	void setCurrentCellID(int i);
+	void moveToCell(int cellID);
+	void setCellID(int lin, int col);
+	string toShortString();
+	string toLongString();
+	void die();
+	void live();
 
-    void draw();
+	void draw();
 
-    bool operator ==(Piece &piece);
+	bool operator ==(Piece &piece);
 };
 
 #endif
