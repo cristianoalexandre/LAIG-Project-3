@@ -120,7 +120,7 @@ void GameScene::display()
 	glPushMatrix();
 		glScaled(SCALING_FACTOR, SCALING_FACTOR, SCALING_FACTOR);
 		graphical_torus->draw();
-		game->draw();
+		game->draw(); //GAME é sempre a ultima coisa a ser feito no draw pois é aplicada uma mask para as cell serem invisiveis.
 	glPopMatrix();
 
     glutSwapBuffers();

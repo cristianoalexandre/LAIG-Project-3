@@ -91,13 +91,15 @@ Board::Board(string boardStr)
 
 void Board::draw()
 {
-    torus_sensors->draw();
-
 
     for (unsigned int i = 0; i < pieces.size(); i++)
     {
         pieces.at(i)->draw();
     }
+
+	glColorMask(0,0,0,0);
+	torus_sensors->draw();
+	glColorMask(1,1,1,1);
 }
 
 void Board::setCellContent(int lin, int col, Piece* piece)

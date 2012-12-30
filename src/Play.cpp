@@ -51,3 +51,8 @@ Piece * Play::getPiece()
 {
 	return piece;
 }
+
+Cell * Play::getDestCell()
+{
+	return destCell;
+}

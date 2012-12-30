@@ -9,6 +9,7 @@ Game::Game()
 	status = PICKING_1;
 	firstPickedCell = -1;
 	secondPickedCell = -1;
+	anim = NULL;
 }
 
 Game::Game(Player * player1, Player * player2)
@@ -21,6 +22,7 @@ Game::Game(Player * player1, Player * player2)
 	firstPickedCell = -1;
 	secondPickedCell = -1;
 	currentPlayer = player1;
+	anim = NULL;
 }
 
 Game::~Game()
@@ -80,11 +82,16 @@ void Game::makePlay(Play* newPlay)
 
 	Piece * currentPiece = newPlay->getPiece();
 
+
 	if (newPlay->type() == MOVE)
 	{
 		cout << "Moving to " << newPlay->getDestCellRow() << "," << newPlay->getDestCellCol() << endl;
 
-		currentPiece->setCellID(newPlay->getDestCellRow(),newPlay->getDestCellCol());
+
+		anim = new PieceAnimation();
+		anim->setPiece(currentPiece);
+		anim->setMovement(newPlay->getDestCell()->getID(),1,1);//ATENCAO a direccao, ainda se tem que calcular isso....
+		//currentPiece->setCellID(newPlay->getDestCellRow(),newPlay->getDestCellCol());
 		cout << "Finished moving." << endl;
 	}
 	else if (newPlay->type() == KILL)
