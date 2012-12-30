@@ -18,6 +18,8 @@
 #include "Sphere.h"
 #include "Torus.h"
 
+
+#include "Environment.h"
 #include "Game.h"
 
 #include <math.h>
@@ -35,6 +37,9 @@ public:
 	void drawModel_box();
 	void activateTexture(int i);
 	~GameScene();
+
+	Environment* getEnvironment();
+	bool stopDrawing;
 
 	/** Control variables declaration */
 	int selectedCellID;
@@ -60,6 +65,8 @@ private:
 	CGFappearance* chess1Appearance;
 	CGFappearance* chess2Appearance;
 	CGFappearance* chess3Appearance;
+
+	Environment* scene_environment;
 
 	/** Primitives declaration */
 	Piece* p;

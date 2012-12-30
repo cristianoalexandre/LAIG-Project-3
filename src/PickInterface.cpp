@@ -136,6 +136,15 @@ void PickInterface::initGUI()
 	addRadioButtonToGroup(levels,"Begginer");
 	addRadioButtonToGroup(levels,"Experienced");
 	addRadioButtonToGroup(levels,"Hardcore Geek");
+	addColumnToPanel(varPanel);
+
+	GLUI_Panel* environmentChoice = addPanelToPanel(varPanel,"Choose Environment",1);
+	GLUI_RadioGroup* environments = addRadioGroupToPanel(environmentChoice,0,6);
+
+	addRadioButtonToGroup(environments,"Regular");
+	addRadioButtonToGroup(environments,"Colourful");
+	addRadioButtonToGroup(environments,"Idiotic");
+	addColumnToPanel(varPanel);
 
 
 
@@ -161,28 +170,34 @@ void PickInterface::processGUI(GLUI_Control *ctrl)
 		};
 		case 4:
 		{	
+			game_scene->stopDrawing = true;
 			switch(ctrl->get_int_val())
 			{
 			case 0:
 				{
+					game_scene->activateTexture(0);
 					cout << "wood" << endl;
 					break;
 				};
 			case 1:
 				{
+					game_scene->activateTexture(1);
 					cout << "glass" << endl;
 					break;
 				};
 			case 2:
 				{
+					game_scene->activateTexture(2);
 					cout << "metal" << endl;
 					break;
 				};
 			}
+			game_scene->stopDrawing = false;
 			break;
 		};
 		case 5:
 		{
+			game_scene->stopDrawing = true;
 			switch(ctrl->get_int_val())
 			{
 			case 0:
@@ -198,6 +213,32 @@ void PickInterface::processGUI(GLUI_Control *ctrl)
 			case 2:
 				{
 					cout << "Hardcore Geek" << endl;
+					break;
+				};
+			}
+			game_scene->stopDrawing = false;
+			break;
+		};
+		case 6:
+		{
+			switch(ctrl->get_int_val())
+			{
+			case 0:
+				{
+					cout << "Regular" << endl;
+					game_scene->getEnvironment()->activateTextureSet(0);
+					break;
+				};
+			case 1:
+				{
+					cout << "Colourful" << endl;
+					game_scene->getEnvironment()->activateTextureSet(1);
+					break;
+				};
+			case 2:
+				{
+					game_scene->getEnvironment()->activateTextureSet(2);
+					cout << "Idiotic" << endl;
 					break;
 				};
 			}
