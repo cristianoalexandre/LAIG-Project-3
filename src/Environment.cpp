@@ -45,6 +45,22 @@ Environment::Environment(){
 
 	//tableLegTexture = new CGFappearance(wall_ambient, wall_diffuse, wall_specular, wall_shininess);
 	tableLegTexture = new CGFappearance("../textures/black.jpg", GL_REPEAT, GL_REPEAT);
+
+	wallTexture2 = new CGFappearance("../textures/brick_wall.jpg", GL_REPEAT, GL_REPEAT);
+	floorTexture2 = new CGFappearance("../textures/stone_floor.jpg", GL_REPEAT, GL_REPEAT);
+	ceilingTexture2 = new CGFappearance("../textures/red_iron.jpg", GL_REPEAT, GL_REPEAT);
+	tableTopTexture2 = new CGFappearance("../textures/red.jpg", GL_REPEAT, GL_REPEAT);
+	tableLegTexture2 = new CGFappearance("../textures/black.jpg", GL_REPEAT, GL_REPEAT);
+	cylinderTexture2 = new CGFappearance("../textures/stainless_steel.jpg", GL_REPEAT, GL_REPEAT);
+	sphereTexture2 = new CGFappearance("../textures/cast_iron_grey.jpg", GL_REPEAT, GL_REPEAT);
+
+	wallTexture3 = new CGFappearance("../textures/marble.jpg", GL_REPEAT, GL_REPEAT);
+	floorTexture3 = new CGFappearance("../textures/pavement.jpg", GL_REPEAT, GL_REPEAT);
+	ceilingTexture3 = new CGFappearance("../textures/wall_texture_white.jpg", GL_REPEAT, GL_REPEAT);
+	tableTopTexture3 = new CGFappearance("../textures/mahogany.jpg", GL_REPEAT, GL_REPEAT);
+	tableLegTexture3 = new CGFappearance("../textures/stainless_steel.jpg", GL_REPEAT, GL_REPEAT);
+	cylinderTexture3 = new CGFappearance("../textures/cast_iron_grey.jpg", GL_REPEAT, GL_REPEAT);
+	sphereTexture3 = new CGFappearance("../textures/fur.png", GL_REPEAT, GL_REPEAT);
 }
 
 void Environment::draw(){
@@ -166,35 +182,35 @@ void Environment::activateTextureSet(int i){
 
 	case 0:
 		{
-			wallTexture->setTexture("../textures/wall_texture_white.jpg");
-			ceilingTexture->setTexture("../textures/ceiling.jpg");
-			floorTexture->setTexture("../textures/wood_floor.jpg");
-			cylinderTexture->setTexture("../textures/mahogany.jpg");
-			sphereTexture->setTexture("../textures/black.jpg");
-			tableTopTexture->setTexture("../textures/mahogany.jpg");
-			tableLegTexture->setTexture("../textures/black.jpg");
+			wallTexture = wallTexture;
+			ceilingTexture = ceilingTexture;
+			floorTexture = floorTexture;
+			cylinderTexture = cylinderTexture;
+			sphereTexture = sphereTexture;
+			tableTopTexture = tableTopTexture;
+			tableLegTexture = tableLegTexture;
 			break;
 		};
 	case 1:
 		{
-			wallTexture->setTexture("../textures/chess3.jpg");
-			floorTexture->setTexture("../textures/stone_floor.jpg");
-			ceilingTexture->setTexture("../textures/red_iron.jpg");
-			tableTopTexture->setTexture("../textures/red.jpg");
-			tableLegTexture->setTexture("../textures/black.jpg");
-			cylinderTexture->setTexture("../textures/stainless_steel.jpg");
-			sphereTexture->setTexture("../textures/cast_iron_grey.jpg");
+			wallTexture = wallTexture2;
+			ceilingTexture = ceilingTexture2;
+			floorTexture = floorTexture2;
+			cylinderTexture = cylinderTexture2;
+			sphereTexture = sphereTexture2;
+			tableTopTexture = tableTopTexture2;
+			tableLegTexture = tableLegTexture2;
 			break;
 		};
 	case 2:
 		{
-			wallTexture->setTexture("../textures/marble.jpg");
-			floorTexture->setTexture("../textures/pavement.jpg");
-			ceilingTexture->setTexture("../textures/wall_texture_white.jpg");
-			tableTopTexture->setTexture("../textures/mahogany.jpg");
-			tableLegTexture->setTexture("../textures/stainless_steel.jpg");
-			cylinderTexture->setTexture("../textures/cast_iron_grey.jpg");
-			sphereTexture->setTexture("../textures/fur.png");
+			wallTexture = wallTexture3;
+			ceilingTexture = ceilingTexture3;
+			floorTexture = floorTexture3;
+			cylinderTexture = cylinderTexture3;
+			sphereTexture = sphereTexture3;
+			tableTopTexture = tableTopTexture3;
+			tableLegTexture = tableLegTexture3;
 			break;
 		};
 

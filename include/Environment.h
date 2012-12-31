@@ -32,6 +32,24 @@ private:
 	CGFappearance* tableTopTexture;
 	CGFappearance* tableLegTexture;
 
+	CGFappearance* wallTexture2;
+	CGFappearance* floorTexture2;
+	CGFappearance* ceilingTexture2;
+
+	CGFappearance* cylinderTexture2;
+	CGFappearance* sphereTexture2;
+	CGFappearance* tableTopTexture2;
+	CGFappearance* tableLegTexture2;
+
+	CGFappearance* wallTexture3;
+	CGFappearance* floorTexture3;
+	CGFappearance* ceilingTexture3;
+
+	CGFappearance* cylinderTexture3;
+	CGFappearance* sphereTexture3;
+	CGFappearance* tableTopTexture3;
+	CGFappearance* tableLegTexture3;
+
 
 public:
 
